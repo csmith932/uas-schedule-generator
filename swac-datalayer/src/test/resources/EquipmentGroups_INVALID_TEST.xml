@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EquipmentGroups xmlns="http://gov.faa.ang.swac.equipevolution/EquipmentGroups">
+	<EquipmentCategory index="0">
+		<ShortName>ADS-B</ShortName>
+		<Description>Automatic Dependent Surveillance-Broadcast</Description>
+		<Filter>
+			<WhereClause>ItineraryView.userClass IN ('D Scheduled Passenger Service Low Cost', 'D Scheduled Passenger Service Mainline', 'D Scheduled Passenger Service Niche', 'D Scheduled Passenger Service Regional', 'D Cargo', 'F Cargo')</WhereClause>
+			<OrderByClause>ItineraryView.maxFlightLegTypeRank DESC, AircraftPrioritySort(ItineraryView.etmsAircraftType) ASC, ItineraryView.maxItineraryDistance DESC</OrderByClause>
+			<Distribution year="2009">
+				<Percentage rank="0" name="none">700000</Percentage>
+				<Percentage rank="1" name="out">4</Percentage>
+				<Percentage rank="2" name="in">25</Percentage>
+			</Distribution>
+		</Filter>
+	</EquipmentCategory>
+</EquipmentGroups>	

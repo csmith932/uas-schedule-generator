@@ -1,0 +1,38 @@
+<!-- Copyright "TBD", Metron Aviation & CSSI. All rights reserved. This computer 
+	Software was developed with the sponsorship of the U.S. Government under 
+	Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance 
+	with AMS 3.5-13.(c)(1). -->
+
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+	<id>src</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<baseDirectory>swac-src-${project.version}/swac-parent</baseDirectory>
+	<moduleSets>
+		<moduleSet>
+			<includes>
+				<include>gov.faa.ang.swac:*</include>
+			</includes>
+			<sources>
+				<fileSets>
+	            	<fileSet>
+	            		<includes>
+	            			<include>**/src/main/java/**</include>
+	            			<include>**/src/main/assembly/**</include>
+	            			<include>**/src/test/java/**</include>
+	            			<include>**/pom.xml</include>
+	            			<include>**/src.xml</include>
+	            			<include>**/.project</include>
+	            			<include>**/.classpath</include>
+	            		</includes>
+					</fileSet>
+	            </fileSets>
+			</sources>
+			
+		</moduleSet>
+	</moduleSets>
+</assembly>

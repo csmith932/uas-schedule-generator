@@ -1,0 +1,1 @@
+This file is just here so the "swac-home/lib/java" directory gets generated.  Otherwise Bootstrap crashes when searching for files in this directory.

@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.faa.ang.swac</groupId>
+		<artifactId>swac-parent</artifactId>
+		<version>2.7.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>swac-scheduler</artifactId>
+	<packaging>jar</packaging>
+	<name>SWAC Forecast Schedule Generator</name>
+    <dependencies>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-datalayer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-timestamp</artifactId>
+		</dependency>
+        <dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-controller</artifactId>
+		</dependency>
+	</dependencies>
+</project>

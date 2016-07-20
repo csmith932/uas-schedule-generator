@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+	<!--
+		Copyright "TBD", Metron Aviation & CSSI. All rights reserved. This
+		computer Software was developed with the sponsorship of the U.S.
+		Government under Contract No. DTFAWA-10-D-00033, which has a copyright
+		license in accordance with AMS 3.5-13.(c)(1).
+	-->
+ 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="error" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p: %m%n" />
+        </layout>
+    </appender>
+    
+    <root>
+        <level value="error" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+</log4j:configuration>

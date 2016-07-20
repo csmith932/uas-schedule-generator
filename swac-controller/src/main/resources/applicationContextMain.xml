@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright "TBD", Metron Aviation & CSSI.  All rights reserved.
+
+This computer Software was developed with the sponsorship of the U.S. Government
+under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance with AMS 3.5-13.(c)(1).
+ -->
+ 
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="propertyConfigurerMain" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:/filesystem.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="context" class="gov.faa.ang.swac.controller.GlobalApplicationContext">
+    	<property name="swacHomeDir" value="${swac.home.dir}"/>
+    	<property name="swacWorkDir" value="${swac.work.dir}"/>
+    	<property name="swacBinDir" value="${swac.home.dir}/${swac.home.bin.dir}"/>
+    	<property name="swacLibCDir" value="${swac.home.dir}/${swac.home.lib.dir}/c++"/>
+    	<property name="swacLibJavaDir" value="${swac.home.dir}/${swac.home.lib.dir}/java"/>
+    	<property name="swacConfigDir" value="${swac.home.dir}/${swac.home.config.dir}"/>
+    	<property name="swacDataDir" value="${swac.work.dir}/${swac.work.data.dir}"/>
+    	<property name="swacScenariosDir" value="${swac.work.dir}/${swac.work.scenarios.dir}"/>
+    	<property name="swacLogDir" value="${swac.work.dir}/${swac.work.log.dir}"/>
+    	<property name="swacTempDir" value="${swac.work.dir}/${swac.work.temp.dir}"/>
+    	<property name="swacDefaultImportsFile" value="${swac.home.dir}/${swac.home.config.dir}/defaultImports.xml"/>
+    	<property name="swacDefaultExportsFile" value="${swac.home.dir}/${swac.home.config.dir}/defaultExports.xml"/>
+    	<property name="swacVersion" value="${swac.version}" />
+    	<property name="swacLogFiles">
+            <list>
+                <value>swac-controller.log</value>
+                <value>debug/swac-debug.log</value>
+                <value>swac-error.log</value>
+                <value>swac-gdp.log</value>
+            </list>
+    	</property>
+    </bean>
+</beans>

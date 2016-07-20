@@ -1,0 +1,1056 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+	<!--
+		Copyright "TBD", Metron Aviation & CSSI. All rights reserved. This
+		computer Software was developed with the sponsorship of the U.S.
+		Government under Contract No. DTFAWA-10-D-00033, which has a copyright
+		license in accordance with AMS 3.5-13.(c)(1).
+	-->
+ 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="info" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="DEBUG_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="debug" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/debug/swac-debug.log" />
+        <param name="MaxFileSize" value="100MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="ERROR_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="error" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/swac-error.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: [%l] %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="FATAL" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="fatal" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="CONTROLLER_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/swac-controller.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="SIMENGINE_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/simengine/swac-simengine.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="WEATHER_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/swac-weather.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="CONGESTION_AVOIDANCE_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="debug" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/swac-congestion.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+	<!--
+		GDP module contains a lot of specialized logging, so it is separated
+		here from the rest
+	-->
+    <appender name="GDP_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/swac-gdp.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="GDP_AAR_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/aar_pareto_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    <appender name="GDP_AIRPORT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/GDP_airport_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    <appender name="GDP_AIRPORT_WEATHER_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/GDP_airport_weather_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    <appender name="GDP_FLIGHT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/GDP_flight_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    <appender name="GDP_PROB_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/prob_GDP_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="APREQ_DEP" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/apreq_dep.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+ 	<appender name="APREQ_DEP_SECTOR" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/apreq_dep_sector.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    
+    <appender name="APREQ_ARR" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/apreq_arr.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+  	<appender name="APREQ_ARR_ARP_FIX" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/apreq_arr_arp_fix.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    
+  	<appender name="AIRLINE_CX_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/cancelations.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="RESTRICTIONS_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/restrictions_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="RESTRICTIONS_CROSSING_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/restrictions_crossing_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <appender name="SECTOR_FLIGHT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/sector_flight_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="RAMP_FLIGHT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/ramp_flight_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+	<appender name="AIRPORT_GROUND_COUNT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airport_ground_count_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="AIRPORT_PARETO_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airport_pareto_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <appender name="AIRPORT_ARRIVAL_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airport_arrival_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <appender name="AIRPORT_DEPARTURE_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airport_departure_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <appender name="AIRPORT_STRATEGIC_CONFIG_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airport_strategic_config_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <appender name="AIRPORT_CONFIG_FLIGHT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airport_config_flight_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="AIRPORT_CONFIG_FINAL_FLIGHT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airport_config_final_flight_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="FIX_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/fix_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="ARC_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/tbfm_arc_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="SMOOTHTRIMMING_CHANGE_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/smoothingtrimming_change_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="AIRLINE_RESPONSE_FLIGHTS" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airline_response_flight_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="AIRLINE_RESPONSE_CANCELLATIONS" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/airline_response_cancellation_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="TIME_INTERVAL_LOG" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="info" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <!-- <appender name="OCEANIC_CONFLICT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="debug" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/oceanic_conflict_check_log.json" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender> -->
+    
+    <appender name="OCEANIC_CONFLICT_RESOLUTION_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="debug" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/oceanic_conflict_resolution_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="OCEANIC_STEP_CLIMB_RESOLUTION_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="debug" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/oceanic_step_climb_resolution_log.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="SIM_EVENT_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/simevent/swac-sim-event.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <appender name="SIM_TRACE_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="trace" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/simevent/swac-sim-trace.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+
+	<!-- ******************************************************************************
+		 * 																			  *
+		 * 								-REPORTS-									  *  
+		 * 																			  *
+		 ****************************************************************************** -->
+	
+	 <appender name="SIM_AIRFRAMES_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/simAirframes.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    	
+	 <appender name="SIM_FLIGHTS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/simFlights.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>	
+    
+	 <appender name="SIM_ROUTES_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/simRoutes.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+      
+	 <appender name="TAM_CHOOSEN_APT_CONFIGS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/TAM_ChosenAirportConfigs.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+       
+	 <appender name="TAM_ARRIVAL_NETWORK_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/TAM_ArrivalNetwork.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="TAM_LEGACY_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/TAM_Report.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="EDCT_CHOOSER_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/edctChooserReport.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+     <appender name="TBFM_LOG_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/TBFMLog.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="AIRPORT_CONFIG_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/airport_config_report.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+    
+	<appender name="BAD_REROUTE_ALTITUDE_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/RerouteBadFinalAltitudes.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="CDA_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/CDA_Report.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="ARRIVAL_ROUTE_SHORTENING_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/Arrival_Route_Shortening_Report.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+        
+    <appender name="REROUTE_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/RerouteReport.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="ACTUAL_ROUTE_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/ActualRouteReport.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    
+    <appender name="FLEET_EVOLUTION_WEIGHTS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-1-Mitre-Percentages.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+            
+    <appender name="FLEET_EVOLUTION_FILTERED_OPS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-2C-OpsToEvolve.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                
+    <appender name="FLEET_EVOLUTION_SCHEDULE_ORIGINAL_CATEGORY_COUNT_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-3A-SchedOrigCatCounts.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                    
+    <appender name="FLEET_EVOLUTION_EVOLVED_CATEGORY_COUNT_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-3B-EvolvedCatCounts.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                        
+    <appender name="FLEET_EVOLUTION_ITINERARY_MOVE_MAP_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-3C-ItineraryMoveMap.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                            
+    <appender name="FLEET_EVOLUTION_SCHEDULE_DISTRIBUTION_COUNT_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-4-ScheduleDistributionCounts.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                
+    <appender name="FLEET_EVOLUTION_EVOLVED_OPS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-5A-EvolvedOps.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                    
+    <appender name="FLEET_EVOLUTION_EVOLVED_CATEGORIES_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-5B-EvolvedCats.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                        
+    <appender name="FLEET_EVOLUTION_INPUT_MATRICES_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-BACE-input-matrices.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                            
+    <appender name="FLEET_EVOLUTION_OUTPUT_MATRICES_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-BACE-output-matrix.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                
+    <appender name="FLEET_EVOLUTION_FILTER_STATS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-2A-FilterStats.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                    
+    <appender name="FLEET_EVOLUTION_INVALID_FLIGHTS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-2B-InvalidFlights.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                        
+    <appender name="FLEET_EVOLUTION_MISSING_ETMS_TYPES_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AM-FE-2C-MissingEtmsTypes.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                        
+    <appender name="FLEET_EVOLUTION_ITINERARIES_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/ITINERARIES.FE.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                            
+    <appender name="FLIGHTS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/FLIGHTS.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                            
+    <appender name="WEATHER_EVENT_LOG_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/weatherEventLog.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                                    
+    <appender name="WEATHER_FORECAST_EVENT_LOG_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/weatherForecastEventLog.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                                      
+    <appender name="ALTITUDE_REASSIGNMENT_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/AltitudeReassignmentReport.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                                          
+    <appender name="ETMS_BADA_MAP_ITINERARY_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/ITINERARIES.ACMAP.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                                          
+    <appender name="INTINERARY_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/ITINERARIES.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                                              
+    <appender name="ROUTES_FINAL_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/Routes_Final.txt" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+                                                                                 
+    <appender name="STEP_CLIMBS_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/step_climbs_report.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>        
+
+    <appender name="OUTLIER_REPORT" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/reports/outlier_report.csv" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+
+	<!-- ******************************************************************************
+		 * 																			  *
+		 * 								-LOGGERS-									  *  
+		 * 																			  *
+		 ****************************************************************************** -->
+	
+    <logger name="org.springframework">
+        <level value="warn" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="DEBUG_LOG" />
+        <appender-ref ref="ERROR_LOG" />
+        <appender-ref ref="FATAL" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.controller">
+        <level value="debug" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="CONTROLLER_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.trajectorymodeler">
+        <level value="debug" />
+        <appender-ref ref="CONTROLLER_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.simengine" additivity="false">
+        <appender-ref ref="SIMENGINE_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.simengine.multiprocess" additivity="false">
+        <level value="debug" />
+       <appender-ref ref="DEBUG_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.weather" additivity="false">
+    	<level value="debug" />
+        <appender-ref ref="WEATHER_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.congestion" additivity="false">
+        <appender-ref ref="CONGESTION_AVOIDANCE_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.gdp" additivity="false">
+        <appender-ref ref="GDP_LOG" />
+    </logger>
+	
+    <logger name="gov.faa.ang.swac.gdp.fileio.AirportParetoCurveCalculator$AirportAarStatsEntry" additivity="false">
+        <appender-ref ref="GDP_AAR_LOG" />
+    </logger>
+	
+    <logger name="gov.faa.ang.swac.gdp.fileio.GDPAirportLoggerEntry"
+		additivity="false">
+        <appender-ref ref="GDP_AIRPORT_LOG" />
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.gdp.fileio.GDPAirportWeatherEntry"
+		additivity="false">
+        <appender-ref ref="GDP_AIRPORT_WEATHER_LOG" />
+    </logger>
+	
+    <logger name="gov.faa.ang.swac.gdp.fileio.GDPFlightLogEntry"
+		additivity="false">
+        <appender-ref ref="GDP_FLIGHT_LOG" />
+    </logger>
+	
+    <logger name="gov.faa.ang.swac.gdp.fileio.ProbabilisticGDPDiagnosticsEntry"
+		additivity="false">
+        <appender-ref ref="GDP_PROB_LOG" />
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.apreq_departures.fileio.ApreqDepartureLogEntry" additivity="false">
+        <appender-ref ref="APREQ_DEP" />
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.apreq_departures.fileio.ApereqDeparturesSectorSnapshots" additivity="false">
+        <appender-ref ref="APREQ_DEP_SECTOR" />
+    </logger>
+    
+     <logger name="gov.faa.ang.swac.apreq_arrivals.fileio.ApreqArrivalLogEntry" additivity="false">
+        <appender-ref ref="APREQ_ARR" />
+    </logger>
+    
+	<logger name="gov.faa.ang.swac.apreq_arrivals.fileio.ApreqArrivalsFixAirportSnapshots" additivity="false">
+        <appender-ref ref="APREQ_ARR_ARP_FIX" />
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.airline.fileio.AirlineCxLogEntry" additivity="false">
+        <appender-ref ref="AIRLINE_CX_LOG" />
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.log.RestrictionLogEntry" additivity="false">
+        <appender-ref ref="RESTRICTIONS_LOG" />
+    </logger>
+    
+	<logger name="gov.faa.ang.swac.simengine.log.RestrictionsCrossingLogEntry" additivity="false">
+        <appender-ref ref="RESTRICTIONS_CROSSING_LOG" />
+    </logger>
+    
+	<logger name="gov.faa.ang.swac.simengine.javasim.report.SectorFlightLog" additivity="false">
+        <appender-ref ref="SECTOR_FLIGHT_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.javasim.report.RampFlightLog" additivity="false">
+        <appender-ref ref="RAMP_FLIGHT_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.javasim.report.AirportGroundCountLog" additivity="false">
+    	<appender-ref ref="AIRPORT_GROUND_COUNT_LOG" />        
+    </logger>
+
+    <logger name="gov.faa.ang.swac.simengine.javasim.report.AirportParetoLog" additivity="false">
+        <appender-ref ref="AIRPORT_PARETO_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.javasim.entity.CoreAirport$ArrivalLog" additivity="false">
+        <appender-ref ref="AIRPORT_ARRIVAL_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.javasim.entity.CoreAirport$DepartureLog" additivity="false">
+        <appender-ref ref="AIRPORT_DEPARTURE_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.airport.SimAirport$StrategicScheduleLog" additivity="false">
+        <appender-ref ref="AIRPORT_STRATEGIC_CONFIG_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.javasim.entity.CoreAirport$AirportConfigurationFlightReport" additivity="false">
+        <appender-ref ref="AIRPORT_CONFIG_FLIGHT_LOG" />        
+    </logger>
+
+	<logger name="gov.faa.ang.swac.airportConfiguration.AirportConfigurationBean$AirportConfigurationFinalFlightLog" additivity="false">
+        <appender-ref ref="AIRPORT_CONFIG_FINAL_FLIGHT_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.javasim.entity.CoreFix$FixLog" additivity="false">
+        <appender-ref ref="FIX_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.tbfm.TbfmTFM$TBFMArcLog" additivity="false">
+        <appender-ref ref="ARC_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.trimmingsupport.TSResultsWriterUsingLog4j" additivity="false">
+        <appender-ref ref="SMOOTHTRIMMING_CHANGE_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.message.MessageLogWriter" additivity="false">
+    	<appender-ref ref="SIM_EVENT_LOG" />
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.gdp.fileio.AirlineResponseFlightLog" additivity="false">
+        <appender-ref ref="AIRLINE_RESPONSE_FLIGHTS" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.gdp.fileio.AirlineResponseCancellationLog" additivity="false">
+        <appender-ref ref="AIRLINE_RESPONSE_CANCELLATIONS" />        
+    </logger>
+
+    <logger name="gov.faa.ang.swac.simengine.javasim.engine.SimulationRunner$TimeIntervalLogger" additivity="false">
+        <appender-ref ref="TIME_INTERVAL_LOG" />        
+    </logger>
+    
+    <!-- <logger name="gov.faa.ang.swac.oceanic.log.OceanicConflictLogger" additivity="false">
+        <appender-ref ref="OCEANIC_CONFLICT_LOG" />        
+    </logger> -->
+    
+    <logger name="gov.faa.ang.swac.oceanic.log.OceanicConflictResolutionLogger" additivity="false">
+        <appender-ref ref="OCEANIC_CONFLICT_RESOLUTION_LOG" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.oceanic.log.OceanicStepClimbResolutionLogger" additivity="false">
+        <appender-ref ref="OCEANIC_STEP_CLIMB_RESOLUTION_LOG" />        
+    </logger>
+    
+    <!-- REPORTS -->
+    
+    <logger name="gov.faa.ang.swac.simengine.AirframeFilesWriter$SimulationAirframesReportLogger" additivity="false">
+        <appender-ref ref="SIM_AIRFRAMES_REPORT" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.AirframeFilesWriter$SimulationFlightsReportLogger" additivity="false">
+        <appender-ref ref="SIM_FLIGHTS_REPORT" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.simengine.AirframeFilesWriter$SimulationRoutesReportLogger" additivity="false">
+        <appender-ref ref="SIM_ROUTES_REPORT" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.tam.parser.AirportManager$AirportConfigReportLogger" additivity="false">
+        <appender-ref ref="TAM_CHOOSEN_APT_CONFIGS_REPORT" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.tam.parser.AirportManager$ArrivalNetworkReportLogger" additivity="false">
+        <appender-ref ref="TAM_ARRIVAL_NETWORK_REPORT" />        
+    </logger>
+     
+     <logger name="gov.faa.ang.swac.tam.RunTamLegacy$TamLegacyReportLogger" additivity="false">
+        <appender-ref ref="TAM_LEGACY_REPORT" />        
+    </logger>
+    
+     <logger name="gov.faa.ang.swac.simengine.edctchooser.EdctChooser$EdctChooserReportLogger" additivity="false">
+        <appender-ref ref="EDCT_CHOOSER_REPORT" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.tbfm.TbfmTFM$TBFMReportLogger" additivity="false">
+        <appender-ref ref="TBFM_LOG_REPORT" />        
+    </logger>
+        
+    <logger name="gov.faa.ang.swac.simengine.javasim.entity.CoreAirport$AirportConfigurationHandler" additivity="false">
+        <appender-ref ref="AIRPORT_CONFIG_REPORT" />        
+    </logger>
+        
+	<logger name="gov.faa.ang.swac.reroute.RerouteBean$BadFinalAltitudesLogger" additivity="false">
+        <appender-ref ref="BAD_REROUTE_ALTITUDE_REPORT" />        
+    </logger>
+
+    <logger name="gov.faa.ang.swac.postprocessor.flight.FlightRecordGeneratorBean$CDAReportLogger" additivity="false">
+        <appender-ref ref="CDA_REPORT" />        
+    </logger>
+    
+    <logger name="gov.faa.ang.swac.reroute.RerouteBean$ArrivalRouteShorteningReportLogger" additivity="false">
+        <appender-ref ref="ARRIVAL_ROUTE_SHORTENING_REPORT" />        
+    </logger>
+	
+	<logger name="gov.faa.ang.swac.simengine.reports.RerouteReport" additivity="false">
+        <appender-ref ref="REROUTE_REPORT" />        
+    </logger>			             	
+    
+    <logger name="gov.faa.ang.swac.simengine.reports.ActualRouteReport" additivity="false">
+        <appender-ref ref="ACTUAL_ROUTE_REPORT" />        
+    </logger>
+				             	 
+    <logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$WeightsReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_WEIGHTS_REPORT" />        
+    </logger>
+                
+    <logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$FilteredOpsReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_FILTERED_OPS_REPORT" />        
+    </logger>
+                    
+    <logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$ScheduleOrigCategoryCountReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_SCHEDULE_ORIGINAL_CATEGORY_COUNT_REPORT" />        
+    </logger>
+                        
+    <logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$EvolvedCategoryCountReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_EVOLVED_CATEGORY_COUNT_REPORT" />        
+    </logger>
+                            
+    <logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$ItineraryMoveMapReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_ITINERARY_MOVE_MAP_REPORT" />        
+    </logger>
+                                
+    <logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$ScheduleDistributionCountReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_SCHEDULE_DISTRIBUTION_COUNT_REPORT" />        
+    </logger>
+                                    
+    <logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$EvolvedOpsReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_EVOLVED_OPS_REPORT" />        
+    </logger>
+    
+	<logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$EvolvedCategoriesReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_EVOLVED_CATEGORIES_REPORT" />        
+    </logger>
+        
+	<logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$InputMatricesReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_INPUT_MATRICES_REPORT" />        
+    </logger>
+    
+	<logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$OutputMatricesReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_OUTPUT_MATRICES_REPORT" />        
+    </logger>
+        
+	<logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$FilterStatsReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_FILTER_STATS_REPORT" />        
+    </logger>
+            
+	<logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$InvalidFlightsReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_INVALID_FLIGHTS_REPORT" />        
+    </logger>
+                
+	<logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$MissingEtmsTypesReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_MISSING_ETMS_TYPES_REPORT" />        
+    </logger>
+                    
+	<logger name="gov.faa.ang.swac.fleetevolution.FleetEvolutionBean$ItinerariesReportLogger" additivity="false">
+        <appender-ref ref="FLEET_EVOLUTION_ITINERARIES_REPORT" />        
+    </logger>
+                        
+	<logger name="gov.faa.ang.swac.aircraftgen.AircraftModelerBean$FlightsReportLogger" additivity="false">
+        <appender-ref ref="FLIGHTS_REPORT" />        
+    </logger>
+
+	<logger name="gov.faa.ang.swac.changegenerator.RunChangeGen$WeatherEventReportLogger" additivity="false">
+        <appender-ref ref="WEATHER_EVENT_LOG_REPORT" />        
+    </logger>
+                            
+	<logger name="gov.faa.ang.swac.changegenerator.RunChangeGen$WeatherForecastEventReportLogger" additivity="false">
+        <appender-ref ref="WEATHER_FORECAST_EVENT_LOG_REPORT" />        
+    </logger>
+                            
+	<logger name="gov.faa.ang.swac.altitude.AltitudeReassignment$AltitudeReassignmentReportLogger" additivity="false">
+        <appender-ref ref="ALTITUDE_REASSIGNMENT_REPORT" />        
+    </logger>     
+                       
+	<logger name="gov.faa.ang.swac.fleetevolution.ScheduleEtmsBadaAircraftMapper$ItineraryAircraftMapReportLogger" additivity="false">
+        <appender-ref ref="ETMS_BADA_MAP_ITINERARY_REPORT" />        
+    </logger>
+                       
+	<logger name="gov.faa.ang.swac.itinerarygenerator.ItineraryGenerator$ItineraryReportLogger" additivity="false">
+        <appender-ref ref="INTINERARY_REPORT" />        
+    </logger>
+                           
+	<logger name="gov.faa.ang.swac.trajectorymodeler.TrajectoryModeler$RoutesFinalReportLogger" additivity="false">
+        <appender-ref ref="ROUTES_FINAL_REPORT" />        
+    </logger>
+                                        
+	<logger name="gov.faa.ang.swac.trajectorymodeler.plugin.FixedDistanceInterpolateTrajectoryPlugin$StepClimbsReportLogger" additivity="false">
+        <appender-ref ref="STEP_CLIMBS_REPORT" />        
+    </logger>   
+
+    <logger name="gov.faa.ang.swac.simengine.reports.OutlierReport" additivity="false">
+        <appender-ref ref="OUTLIER_REPORT" />
+    </logger>
+
+    <!-- END REPORTS -->
+    
+    <root>
+        <level value="fatal" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+</log4j:configuration>

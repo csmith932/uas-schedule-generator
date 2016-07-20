@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright "TBD", Metron Aviation & CSSI.  All rights reserved.
+
+This computer Software was developed with the sponsorship of the U.S. Government
+under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance with AMS 3.5-13.(c)(1).
+ -->
+ 
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+    <!-- 
+    	********** Parameterized input files ********** 
+    
+    	This list of DataDescriptor beans links query criteria in the ParameterizedDataDescriptor to a specific
+    	file system location in the FileDataDescriptor (baseDescriptor property). These are registered at runtime
+    	such that ParameterizedDataDescriptors elsewhere may locate the data by query criteria alone. A template for
+    	defining these beans follows:
+    	
+    	HERE:
+   		    <bean class="gov.faa.ang.swac.datalayer.identity.ParameterizedDataDescriptor">
+		    	<property name="baseDate" value="YYYYMMDD(optional)"/>
+				<property name="forecastFiscalYear" value="YYYY(optional)"/>
+				<property name="classifier" value="someUniqueScenarioIdentifier(optional)"/>
+				<property name="dataType" value="package.name.DataClassName"/>
+				<property name="baseDescriptor">
+					<bean class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+						<property name="location" value="[BIN|DATA|REPORT|OUTPUT|TEMP]"/>
+						<property name="resourceName" value="filename.extension"/>
+						<property name="readOnly" value="[true|false]"/>
+				    </bean>
+				</property>
+		    </bean>
+		    
+		ELSEWHERE:
+			<bean class="gov.faa.ang.swac.datalayer.identity.ParameterizedDataDescriptor">
+		    	<property name="baseDate" value="YYYYMMDD(optional)"/>
+				<property name="forecastFiscalYear" value="YYYY(optional)"/>
+				<property name="classifier" value="someUniqueScenarioIdentifier(optional)"/>
+				<property name="dataType" value="package.name.DataClassName"/>
+		    </bean>
+    -->
+    <util:list id="defaultImports" value-type="gov.faa.ang.swac.datalayer.identity.DataDescriptor">
+    	<description>
+    		These are the default data files. Specify additional files in defaultExports.xml and they will be
+    		merged into this list.  
+    	</description>
+	</util:list>
+    
+    <!-- 
+    	********** Named input files ********** 
+    
+    	This list of DataDescriptor beans provides metadata for input files that can be referenced by name. For any bean described
+    	below with '<bean id="AAAA" ...', any bean elsewhere may reference the data using '<property name="somePropertyName" ref="AAAA" />.
+    	If additional named files beyond those specified here are required, create bean definitions for them in defaultExports.xml. dataType
+    	must match for any DataDescriptor being replaced in the scenario configuration, so it is recommended to copy-paste-modify the bean
+    	definition from here and change the resourceName property. File system navigation is generally not permitted beyond the default available
+    	locations (DATA, BIN, LOG, TEMP, OUTPUT, REPORT).
+    
+    -->
+   	<bean id="aspm_nominal_taxi_times" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.scheduler.data.ASPMTaxiTimes.ASPMTaxiTimesRecord"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="aspm_nominal_taxi_times.csv"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+    <bean id="international_country_region_map" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="international_country_region_map.txt"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+    <bean id="international_ops_counts" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.ForecastInternationalAirportData"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="international_ops_counts.csv"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+    <bean id="merged_airport_data" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.scheduler.airport_data.AirportDataMap"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="merged_airport_data.txt"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+    <bean id="opsnet" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.ForecastAirportCountsRecord"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="opsnet.csv"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+    <bean id="taf_aops" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="taf_aops.csv"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+    <bean id="vfr_helicopter_percent" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.scheduler.vfr.VFRHelicopterMap"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="vfr_helicopter_percent.csv"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+    <bean id="scheduleFile" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+        <property name="dataType" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
+        <property name="location" value="DATA"/>
+        <property name="readOnly" value="true"/>
+    </bean>
+</beans>

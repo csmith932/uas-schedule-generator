@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.metronaviation.com/WxPolygonSchema"
+        xmlns:tns="http://www.metronaviation.com/WxPolygonSchema"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+ 
+    <xs:element name="WxPolygons">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="WxPolygon" type="tns:WxPolygonType" maxOccurs="unbounded"/>
+             </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+ 
+    <xs:complexType name="WxPolygonType">
+        <xs:sequence>
+            <xs:element name="GCPoint" type="tns:GCPointType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="maxAlt" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="minAlt" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="startTime" use="required">
+             <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="\d{4}-\d{2}-d{2}\s\d{2}:\d{2}:\d{2}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="endTime" use="required">
+             <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="\d{4}-\d{2}-d{2}\s\d{2}:\d{2}:\d{2}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+ 
+    <xs:complexType name="GCPointType">
+        <xs:attribute name="latitude" type="xs:decimal" use="required"/>
+        <xs:attribute name="longitude" type="xs:decimal" use="required"/>
+    </xs:complexType>
+</xs:schema>

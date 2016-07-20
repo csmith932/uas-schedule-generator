@@ -1,0 +1,50 @@
+
+	<!--
+		Copyright "TBD", Metron Aviation & CSSI. All rights reserved. This
+		computer Software was developed with the sponsorship of the U.S.
+		Government under Contract No. DTFAWA-10-D-00033, which has a copyright
+		license in accordance with AMS 3.5-13.(c)(1).
+	-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.faa.ang.swac</groupId>
+		<artifactId>swac-parent</artifactId>
+		<version>2.7.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>swac-data</artifactId>
+	<packaging>jar</packaging>
+	<name>SWAC Data Distribution</name>
+    <dependencies>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+	        <artifactId>spring-core</artifactId>
+	        <!-- 
+	         Do not use version 3.0.0. That version is missing a class used by swac:
+	         org.springframework.core.convert.support.PropertyTypeDescriptor 
+	        -->
+	        <version>3.0.5.RELEASE</version>
+		</dependency>
+<!--
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+-->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+	</dependencies>
+</project>

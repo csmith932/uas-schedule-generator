@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright "TBD", Metron Aviation & CSSI.  All rights reserved.
+
+This computer Software was developed with the sponsorship of the U.S. Government
+under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance with AMS 3.5-13.(c)(1). 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="bada_records" type="BADARecords"/>
+	<xs:complexType name="BADARecords">
+		<xs:sequence>
+			<xs:element name="bada_record" type="BADARecord" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="number_of_records" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="BADARecord">
+		<xs:sequence>
+			<xs:element name="bada_header" type="BADAHeader" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="data" type="Data" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BADAHeader">
+		<xs:sequence>
+			<xs:element name="bada_date" type="xs:date" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="aircraft_type" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="src_opf_date" type="xs:date" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="src_apf_date" type="xs:date" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="cas_speeds" type="Speeds" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="mass_levels" type="MassLevels" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="temperature" type="Temperature" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="maximum_altitude" type="MaximumAltitude" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Speeds">
+		<xs:sequence>
+			<xs:element name="climb" type="CASLine" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="cruise" type="CASLine" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="descent" type="CASLine" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CASLine">
+		<xs:sequence>
+			<xs:element name="calibrated_airspeed" type="CalibratedAirspeed" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="mach" type="xs:float" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CalibratedAirspeed">
+		<xs:sequence>
+			<xs:element name="low" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="high" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="unit_of_measure" type="xs:string" use="optional" default="UNK"/>
+	</xs:complexType>
+	<xs:complexType name="MassLevels">
+		<xs:annotation>
+			<xs:documentation>Aircraft mass for determining fuel burn</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="low" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="nominal" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="high" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="unit_of_measure" type="xs:string" use="optional" default="kg"/>
+	</xs:complexType>
+	<xs:complexType name="Temperature">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="unit_of_measure" type="xs:string" use="optional" default="UNK"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MaximumAltitude">
+		<xs:simpleContent>
+			<xs:extension base="xs:positiveInteger">
+				<xs:attribute name="unit_of_measure" type="xs:string" use="optional" default="ft"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Data">
+		<xs:sequence>
+			<xs:element name="flight_level_record" type="FlightLevelRecord" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FlightLevelRecord">
+		<xs:sequence>
+			<xs:element name="flight_level" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="cruise" type="CruiseFL" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="climb" type="ClimbFL" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="descent" type="DescentFL" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CruiseFL">
+		<xs:sequence>
+			<xs:element name="true_airspeed" type="TrueAirspeed" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="fuel" type="Fuel" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ClimbFL">
+		<xs:sequence>
+			<xs:element name="true_airspeed" type="TrueAirspeed" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="rate_of_climb_descent" type="RateOfClimbDescent" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="fuel" type="Fuel" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DescentFL">
+		<xs:sequence>
+			<xs:element name="true_airspeed" type="TrueAirspeed" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="rate_of_climb_descent" type="RateOfClimbDescent" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="fuel" type="Fuel" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TrueAirspeed">
+		<xs:annotation>
+			<xs:documentation>True airspeed of the aircraft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:positiveInteger">
+				<xs:attribute name="unit_of_measure" type="xs:string" use="optional" default="kts"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="RateOfClimbDescent">
+		<xs:annotation>
+			<xs:documentation>Rate of climb or descent</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="low" type="xs:positiveInteger" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="nominal" type="xs:positiveInteger" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="high" type="xs:positiveInteger" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="unit_of_measure" type="xs:string" use="optional" default="fpm"/>
+	</xs:complexType>
+	<xs:complexType name="Fuel">
+		<xs:annotation>
+			<xs:documentation>Fuel usage</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="low" type="xs:float" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="nominal" type="xs:float" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="high" type="xs:float" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="unit_of_measure" type="xs:string" use="optional" default="kg/min"/>
+	</xs:complexType>
+</xs:schema>

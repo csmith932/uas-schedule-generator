@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+	<!--
+		Copyright "TBD", Metron Aviation & CSSI. All rights reserved. This
+		computer Software was developed with the sponsorship of the U.S.
+		Government under Contract No. DTFAWA-10-D-00033, which has a copyright
+		license in accordance with AMS 3.5-13.(c)(1).
+	-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.faa.ang.swac</groupId>
+		<artifactId>swac-parent</artifactId>
+		<version>2.7.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>swac-controller</artifactId>
+	<packaging>jar</packaging>
+	<name>SWAC Controller</name>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<additionalProjectnatures>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+					</additionalProjectnatures>
+					<additionalBuildcommands>
+						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+					</additionalBuildcommands>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<wtpversion>1.5</wtpversion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>gov.faa.ang.swac.controller.Main</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+		<resources>
+      <resource>
+        <directory>src/main/resources</directory>
+       	<filtering>true</filtering>
+      	<includes>
+       		<include>filesystem.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>filesystem.properties</exclude>
+        </excludes>
+      </resource>
+    </resources>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-timestamp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-datalayer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-data</artifactId>
+		</dependency>
+  		<dependency>
+			<groupId>net.sourceforge.collections</groupId>
+			<artifactId>collections-generic</artifactId>
+			<version>${commons-collections-generic.version}</version>
+		</dependency>  			
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>fbrp</groupId>
+			<artifactId>graph</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+		</dependency>
+		<!--  mvn dependency:analyze claims we need this -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+	        <artifactId>spring-core</artifactId>
+	        <!-- 
+	         Do not use version 3.0.0. That version is missing a class used by swac:
+	         org.springframework.core.convert.support.PropertyTypeDescriptor 
+	        -->
+	        <version>3.0.5.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+	        <artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
+        	<groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.1</version>
+        </dependency>
+	</dependencies>
+</project>

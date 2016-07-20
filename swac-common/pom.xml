@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>swac-parent</artifactId>
+		<groupId>gov.faa.ang.swac</groupId>
+		<version>2.7.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>swac-common</artifactId>
+	<packaging>jar</packaging>
+	<name>SWAC Common Library</name>
+	<url>http://www.metronaviation.com</url>
+	<properties>
+		<jcip-annotations.version>1.0</jcip-annotations.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>net.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+			<version>${jcip-annotations.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jgrib</groupId>
+			<artifactId>jgrib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-timestamp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.faa.ang.swac</groupId>
+			<artifactId>swac-datalayer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.collections</groupId>
+			<artifactId>collections-generic</artifactId>
+			<version>${commons-collections-generic.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mozilla</groupId>
+			<artifactId>rhino</artifactId>
+			<version>1.7R4</version>
+		</dependency>
+		<dependency>
+			<groupId>de.micromata.jak</groupId>
+			<artifactId>JavaAPIforKml</artifactId>
+		</dependency>		
+	</dependencies>
+</project>

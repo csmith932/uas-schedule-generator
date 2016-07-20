@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+Copyright "TBD", Metron Aviation & CSSI.  All rights reserved.
+
+This computer Software was developed with the sponsorship of the U.S. Government
+under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance with AMS 3.5-13.(c)(1).
+ -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+    <!-- ******************************************************************************************************************************** 
+    	
+    	IMPORTANT NOTE: Tags of the type "<property name="AAAA" ref="BBBB" /> are direct references to beans defined with 
+    	a tag like "<bean id="BBBB" >...</bean>. These references may refer to beans in this file or in one of the following:
+    	defaultImports.xml, defaultExports.xml. This type of referencing is common for input data, and should not be confused with
+    	file names. If a different input file must be used for a given property, create a FileDataDescriptor with the appropriate
+    	meta-data in defaultExports.xml and reference the DataDescriptor by name here.
+    	
+    	IMPORTANT NOTE: Property values of the type "${SOME_NAME}" are property place-holders that are replaced at run-time with the
+    	corresponding "SOME_NAME=some_value" in the accompanying .properties file. These may be replaced in this file with literal values,
+    	or conversely literal values may be extracted to the properties file by naming a place-holder in this file and supplying its value
+    	in the properties file. Any place-holders in this file that aren't assigned in the properties file will be treated as literal values
+    	at run-time, which will likely cause a fatal error loading the configuration. Any property values assigned in the properties file
+    	that don't match a place-holder here will be ignored.
+    	
+    *************************************************************************************************************************************	
+    -->
+
+    <bean id="scenario" class="gov.faa.ang.swac.controller.core.Batch">
+        <description>
+            This is the main execution unit of SWAC. Batch defines scenario-specific property values and a sequence of Tasks.
+            The properties are inherited by Tasks for use in querying data and directly for processing. The Task list
+            is executed sequentially. Each Task is a bean reference defined separately in the configuration. Tasks may
+            be added to, deleted from, or reordered in this list independently, but data dependencies must be respected between them.
+            Data dependencies are defined by IntermediateDataDescriptor properties in Task bean definitions that reference other
+            tasks as the dataSource.
+        </description>
+    	<!-- yyyyMMdd for base calendar year -->
+        <property name="baseDates" value="${BASE_DATE}"/>
+    	<!-- yyyy for forecast fiscal year. Forecast calendar year and simulation start date are computed from this and baseDate -->
+        <property name="forecastFiscalYears" value="${FORECAST_FISCAL_YEAR}"/>
+        <!-- Arbitrary query string. Groups of input files relevant to a particular scenario should have a classifier value-->
+        <property name="classifiers" value="${CLASSIFIER}"/>
+        <!-- Global random seed. Primarily used to initialize the random number generators for spawning Monte Carlo instances -->
+        <property name="randomSeed" value="${RANDOM_SEED}"/>
+        <!-- Monte Carlo functionality (ON, OFF, REPLAY) -->
+        <property name="monteCarloMode" value="${MONTE_CARLO_MODE}"/>
+        <!-- Number of Monte Carlo iterations for each scenario. Ignored when Monte Carlo mode is disabled -->
+        <property name="sampleSize" value="${SAMPLE_SIZE}"/>
+        <!-- Number of inner loop Monte Carlo iterations for each outer loop. Ignored when Monte Carlo mode is disabled -->
+        <property name="innerLoopCount" value="${INNER_LOOP_COUNT}"/>
+        <!-- Configures the Job execution engine for parallel/distributed processing -->
+        <property name="executorServiceFactory">
+            <bean id="executor" class="gov.faa.ang.swac.controller.core.ThreadPoolExecutorServiceFactory">
+                <!-- Number of processors over which to distribute Monte Carlo execution. This can also be auto-detected. Ignored when Monte Carlo mode is disabled -->
+                <property name="numProcessors" value="${NUM_PROCESSORS}"/>
+                <!-- Maximum number of processors over which to distribute Monte Carlo execution if the actual number is being auto-detected. Ignored when Monte Carlo mode is disabled -->
+                <property name="memoryPerInstance" value="${MEMORY_PER_INSTANCE}"/>
+            </bean>
+        </property>
+        <!-- In Replay Mode, this id field tells the controller which cached configuration to load -->
+        <property name="scenarioExecutionId" value="${SCENARIO_EXECUTION_ID}"/>
+		<!-- {NONE|VERBOSE|DEBUG} determines how much logging and data dumping is performed. WARNING: DEBUG level generates more than 1GB for each scenario -->
+        <property name="swacVersion" value="${SWAC_RELEASE}"/>
+        <property name="tasks">
+            <!--  See individual task bean definitions for details -->
+            <list>
+                <!-- Scale base schedule to forecast traffic levels using cloning of existing flights and insertion of VFR placeholder flights -->
+                <ref local="scheduleGen"/>
+                <ref local="dumpForecastScheduleFile"/>
+            </list>
+        </property>
+    	<!-- Register metadata for parameterized queries based on scenario properties -->
+    	<!-- 
+    		Some input files represent query result sets filtered by base date, forecast year, or other criteria. Often the query metadata
+    		is encoded in the file name but this is not necessarily the case. To handle this problem in all cases, query metadata for these
+    		files is registered in a list of Spring beans in defaultImports.xml and another in defaultExports.xml. This task loads the registration
+    		data into the data layer to allow subsequent reference to the appropriate record set by query criteria alone, with no direct bean
+    		reference or file name. NOTE: with the current back-end data store, (1) query criteria must match exactly, (2) collisions between beans with the
+    		same query criteria defined in both import files are resolved by giving precedence to the last one loaded - defaultExports.xml 
+    		(file searching via RegisterParameterizedFilesBean is first, i.e. lowest precedence)
+    	 -->
+        <property name="defaultImports" ref="defaultImports"/>
+        <property name="defaultExports" ref="defaultExports"/>
+        <property name="configurationCache">
+            <bean id="dataLayerAirportsFile" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+                <property name="dataType" value="gov.faa.ang.swac.controller.core.montecarlo.replay.ConfigurationCache"/>
+                <property name="location" value="TEMP"/>
+                <property name="resourceName" value="ConfigurationCache.xml"/>
+                <property name="readOnly" value="false"/>
+                <property name="faultTolerant" value="true"/>
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="scheduleGen" class="gov.faa.ang.swac.controller.core.TaskConfiguration">    
+        <description>
+            The forecast schedule generator scales default schedule data to
+            represent forecast daily traffic details. A Fratar algorithm
+            selects flights from an existing schedule to be cloned and time-
+            shifted to approximate increased traffic between airport pairs
+            (per-airport traffic determined by TAF). Flight counts at each
+            airport are padded by "dummy" flights to represent VFR traffic and
+            bring totals in line with the TAF. 	
+        </description>
+        <property name="enabled" value="${GEN_SCHED}"/>
+        <property name="global" value="false"/>
+        <property name="inputData">
+            <map>
+                <entry key="tafAopsFile" value-ref="taf_aops"/>
+                <entry key="internationalCountryRegionMapFile" value-ref="international_country_region_map"/>
+                <entry key="internationalOpsCountsFile" value-ref="international_ops_counts"/>
+                <entry key="aspmNominalTaxiTimesFile" value-ref="aspm_nominal_taxi_times"/>
+                <entry key="vfrHelicopterPercentFile" value-ref="vfr_helicopter_percent"/>
+                <entry key="mergedAirportDataFile" value-ref="merged_airport_data"/>
+                <entry key="inputScheduleFile" value-ref="scheduleFile" />
+                <entry key="opsnetFile" value-ref="opsnet"/>
+            </map>
+        </property>
+        <property name="innerLoopVariables">
+            <map>
+                <entry key="forecastClonerRandomSeed" value="${FORECAST_CLONER_RANDOM_SEED}"/>
+                <entry key="scheduleClonerRandomSeed" value="${SCHED_REC_CLONER_RANDOM_SEED}"/>
+                <entry key="vfrLocalTimeRandomSeed" value="${VFR_LOCALTIME_RANDOM_SEED}"/>
+            </map>
+        </property>
+        <property name="outputData">
+            <map>
+                <entry key="forecastSchedule" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
+                <entry key="outputCountryRegionRecordList" value="gov.faa.ang.swac.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord"/>
+                <entry key="outputMergedAirportDataFile" value="gov.faa.ang.swac.scheduler.airport_data.AirportDataMap"/>
+            </map>
+        </property>
+        <property name="dataAccessObjects">
+            <map>
+            </map>
+        </property>
+        <property name="prototype">
+            <bean class="gov.faa.ang.swac.scheduler.forecast.RunScheduleGenerator">
+                <property name="cloneTimeShiftStDev" value="${CLONE_TIME_SHIFT_ST_DEV}"/>
+                <property name="integerizationTolerance" value="0.5"/>
+                <property name="fratarMaxSteps" value="20"/>
+                <property name="fratarConvergenceCriteria" value="0.001"/>
+                <property name="numHoursFromGMT" value="9"/>
+                <property name="numDaysToForecast" value="1"/>
+            </bean>
+        </property>
+        <property name="randomizedConfiguration">
+            <map>
+                <entry key="forecastClonerRandomSeed">
+                    <bean class="gov.faa.ang.swac.common.random.distributions.UniformDistribution">
+                        <property name="min" value="19551105"/>
+                        <property name="max" value="195511050"/> 
+                    </bean>
+                </entry>
+                <entry key="scheduleClonerRandomSeed">
+                    <bean class="gov.faa.ang.swac.common.random.distributions.UniformDistribution">
+                        <property name="min" value="13453453"/>
+                        <property name="max" value="134534530"/> 
+                    </bean>
+                </entry>
+                <entry key="vfrLocalTimeRandomSeed">
+                    <bean class="gov.faa.ang.swac.common.random.distributions.UniformDistribution">
+                        <property name="min" value="134345"/>
+                        <property name="max" value="1343450"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="dumpForecastScheduleFile" class="gov.faa.ang.swac.controller.core.GenericFileOutputTaskConfiguration">
+        <property name="enabled" value="true"/>
+        <!-- TODO: Output file suppression -->
+        <property name="data">
+            <bean class="gov.faa.ang.swac.datalayer.identity.IntermediateDataDescriptor">
+                <property name="dataType" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
+                <property name="dataSource" ref="scheduleGen"/>
+            </bean>
+        </property>
+        <property name="file" ref="forecastSchedule"/>
+    </bean>
+</beans>
+

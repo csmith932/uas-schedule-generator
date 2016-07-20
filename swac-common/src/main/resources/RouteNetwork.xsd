@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.metronaviation.com/GraphSchema"
+        xmlns:tns="http://www.metronaviation.com/GraphSchema"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">
+            Graph Schema for SWAC
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="graph">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="vertex" type="tns:Vertex" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="edge" type="tns:Edge" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required" fixed="JetRouteGraph"/>
+            <xsd:attribute name="edgedefault">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="directed"/>
+                        <xsd:enumeration value="undirected"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="Vertex">
+        <xsd:attribute name="id" type="xsd:nonNegativeInteger" use="required"/>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="lat" type="xsd:double"/>
+        <xsd:attribute name="lon" type="xsd:double"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Edge">
+        <xsd:attribute name="id" type="xsd:nonNegativeInteger" use="required"/>
+        <xsd:attribute name="source" type="xsd:nonNegativeInteger" use="required"/>
+        <xsd:attribute name="target" type="xsd:nonNegativeInteger" use="required"/>
+    </xsd:complexType>
+</xsd:schema>

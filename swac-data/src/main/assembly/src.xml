@@ -1,0 +1,39 @@
+<!-- 
+Copyright "TBD", Metron Aviation & CSSI.  All rights reserved.
+
+This computer Software was developed with the sponsorship of the U.S. Government
+under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance with AMS 3.5-13.(c)(1).
+ -->
+
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+  <id>release</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <id>data</id>
+  <files>
+      <file>
+          <source>target/classes/gov/faa/ang/swac/data/DataExport.class</source>
+      </file>
+  </files>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes/data</directory>
+      <outputDirectory>data</outputDirectory>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>target/classes/scenarios/scenario</directory>
+      <outputDirectory>scenarios/scenario</outputDirectory>
+      <fileMode>0444</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>target/classes/scenarios/dataprocessor</directory>
+      <outputDirectory>scenarios/dataprocessor</outputDirectory>
+      <fileMode>0444</fileMode>
+    </fileSet>
+  </fileSets>
+</assembly>

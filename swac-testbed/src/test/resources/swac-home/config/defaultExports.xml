@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright "TBD", Metron Aviation & CSSI.  All rights reserved.
+
+This computer Software was developed with the sponsorship of the U.S. Government
+under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance with AMS 3.5-13.(c)(1).
+ -->
+ 
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+    <!-- 
+    	********** Parameterized Input Files ********** 
+    
+    	This list of DataDescriptor beans links query criteria in the ParameterizedDataDescriptor to a specific
+    	file system location in the FileDataDescriptor (baseDescriptor property). These are registered at runtime
+    	such that ParameterizedDataDescriptors elsewhere may locate the data by query criteria alone. A template for
+    	defining these beans follows:
+    	
+    	HERE:
+   		    <bean class="gov.faa.ang.swac.datalayer.identity.ParameterizedDataDescriptor">
+		    	<property name="baseDate" value="YYYYMMDD(optional)"/>
+				<property name="forecastFiscalYear" value="YYYY(optional)"/>
+				<property name="classifier" value="someUniqueScenarioIdentifier(optional)"/>
+				<property name="dataType" value="package.name.DataClassName"/>
+				<property name="baseDescriptor">
+					<bean class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+						<property name="location" value="[BIN|DATA|REPORT|OUTPUT|TEMP]"/>
+						<property name="resourceName" value="filename.extension"/>
+						<property name="readOnly" value="[true|false]"/>
+				    </bean>
+				</property>
+		    </bean>
+		    
+		ELSEWHERE:
+			<bean class="gov.faa.ang.swac.datalayer.identity.ParameterizedDataDescriptor">
+		    	<property name="baseDate" value="YYYYMMDD(optional)"/>
+				<property name="forecastFiscalYear" value="YYYY(optional)"/>
+				<property name="classifier" value="someUniqueScenarioIdentifier(optional)"/>
+				<property name="dataType" value="package.name.DataClassName"/>
+		    </bean>
+    -->
+    <util:list id="defaultExports" value-type="gov.faa.ang.swac.datalayer.identity.ParameterizedDataDescriptor">
+    	<!-- 
+    		Default files are listed in the defaultImports list in fileImports.xml. Specify additional
+    		query-able data here. Unpredictable behavior may result if identical query criteria 
+    		(including data type) are repeated here for different files.
+    	-->
+    	
+    	<!-- Example (schedule file) 
+    	<bean class="gov.faa.ang.swac.datalayer.identity.ParameterizedDataDescriptor">
+	    	<property name="baseDate" value="20081108"/>
+			<property name="dataType" value=""/>
+			<property name="baseDescriptor">
+				<bean class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+					<property name="location" value="DATA"/>
+					<property name="resourceName" value="forecast_sample_20081108_2009_2009.txt"/>
+					<property name="readOnly" value="true"/>
+			    </bean>
+		    </property>
+	    </bean>
+   		-->
+	</util:list>
+    
+    <!-- 
+    	********** Named input files ********** 
+    
+    	This list of DataDescriptor beans provides metadata for input files that can be referenced by name. For any bean described
+    	below with '<bean id="AAAA" ...', any bean elsewhere may reference the data using '<property name="somePropertyName" ref="AAAA" />.
+    	
+    	By default, nothing is done with files described here: it is only for organization. Default data files are listed in defaultImports.xml.
+    	dataType must match for any DataDescriptor being replaced in the scenario configuration, so it is recommended to copy-paste-modify the bean
+    	definition from defaultImports.xml and change the resourceName property. File system navigation is generally not permitted beyond the default available
+    	locations (DATA, BIN, LOG, TEMP, OUTPUT, REPORT). An example is listed below.
+    	
+    -->
+   	
+    <!-- Example
+    <bean id="aircraft_priority" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+		<property name="dataType" value="gov.faa.ang.swac.changegenerator.AirportScriptManager"/>
+		<property name="location" value="DATA"/>
+		<property name="resourceName" value="aircraft_priority.csv"/>
+		<property name="readOnly" value="true"/>
+    </bean>
+	 -->
+
+    <bean id="forecastSchedule" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+        <property name="location" value="REPORT"/>
+        <property name="dataType" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
+        <property name="resourceName" value="_forecastSchedule_.txt"/>
+    </bean>
+</beans>

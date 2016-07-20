@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://gov.faa.ang.swac.equipevolution/EquipmentGroups" xmlns:tns="http://gov.faa.ang.swac.equipevolution/EquipmentGroups" elementFormDefault="qualified">
+
+    <element name="EquipmentGroups" type="tns:CategoryListType"></element>
+    
+    <complexType name="CategoryListType">
+    	<sequence>
+    		<element name="EquipmentCategory"
+    			type="tns:CategoryType" minOccurs="1" maxOccurs="unbounded">
+    		</element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="CategoryType">
+    	<sequence>
+    		<element name="ShortName" type="string"></element>
+    		<element name="Description" type="string"></element>
+    		<element name="Filter" type="tns:FilterType"
+    			maxOccurs="unbounded" minOccurs="1">
+    		</element>
+    	</sequence>
+    	<attribute name="index" type="int" use="required"></attribute>
+    </complexType>
+
+    <complexType name="FilterType">
+    	<sequence>
+    		<element name="WhereClause" type="string"></element>
+    		<element name="OrderByClause" type="string"></element>
+            <element name="Distribution" type="tns:DistributionType" maxOccurs="unbounded" minOccurs="1">
+    		</element>
+        </sequence>
+    </complexType>
+
+    <complexType name="DistributionType">
+    	<sequence>
+    		<element name="Percentage" maxOccurs="unbounded"
+    			type="tns:CapabilityType">
+    		</element>
+    	</sequence>
+    	<attribute name="year" use="required">
+    		<simpleType>
+    			<restriction base="int">
+    				<minExclusive value="2000"></minExclusive>
+    				<maxExclusive value="2999"></maxExclusive>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+    
+    <simpleType name="PercentageType">
+    	<restriction base="float">
+    		<minInclusive value="0"></minInclusive>
+    		<maxInclusive value="100"></maxInclusive>
+    	</restriction>
+    </simpleType>
+
+    <complexType name="CapabilityType">
+    	<simpleContent>
+    		<extension base="tns:PercentageType">
+    			<attribute name="rank" type="int"></attribute>
+    			<attribute name="name" type="string"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+</schema>

@@ -1,0 +1,67 @@
+<!-- Copyright "TBD", Metron Aviation & CSSI. All rights reserved. This computer 
+Software was developed with the sponsorship of the U.S. Government under 
+Contract No. DTFAWA-10-D-00033, which has a copyright license in accordance 
+with AMS 3.5-13.(c)(1). -->
+
+<assembly
+    xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>release</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <baseDirectory>.</baseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>swac-home/lib/java</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+    <files>
+        <file>
+            <source>src/main/bin/new-swac-copy-scenario.sh</source>
+            <destName>swac-copy-scenario</destName>
+            <outputDirectory>swac-home/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>src/main/bin/new-swac-create-scenario.sh</source>
+            <destName>swac-create-scenario</destName>
+            <outputDirectory>swac-home/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>src/main/bin/new-swac-delete-scenario.sh</source>
+            <destName>swac-delete-scenario</destName>
+            <outputDirectory>swac-home/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>src/main/bin/new-swac.sh</source>
+            <destName>swac</destName>
+            <outputDirectory>swac-home/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </file>
+    </files>	
+    <fileSets>
+        <fileSet>
+            <directory>src/main/lib</directory>
+            <outputDirectory>swac-home/lib</outputDirectory>
+            <fileMode>0444</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/config</directory>
+            <outputDirectory>swac-home/config</outputDirectory>
+            <fileMode>0444</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/bin</directory>
+            <outputDirectory>swac-home/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+            <includes>
+                <include>*.bat</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>
