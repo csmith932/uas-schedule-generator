@@ -28,15 +28,15 @@ public class ProjectFixture {
 	public static final File swacConfigDir = new File(DEFAULT_SWAC_HOME_DIR+"/config");
 	
 	public static File swacWorkDir = new File(DEFAULT_SWAC_WORK_DIR);
-	public static File swacScenarioDir = new File(swacWorkDir, "scenarios/scenario");
-	public static File swacScenarioXmlFile = new File(swacScenarioDir, "scenario.xml");
-	public static File swacScenarioPropertiesFile = new File(swacScenarioDir, "scenario.properties");
+	public static File swacScenarioDir = new File(swacWorkDir, "scenarios/uas");
+	public static File swacScenarioXmlFile = new File(swacScenarioDir, "uas.xml");
+	public static File swacScenarioPropertiesFile = new File(swacScenarioDir, "uas.properties");
 	
 	public static void setSwacWorkDir(String dir) {
 		swacWorkDir = new File(dir);
-		swacScenarioDir = new File(swacWorkDir, "scenario");
-		swacScenarioXmlFile = new File(swacScenarioDir, "scenario.xml");
-		swacScenarioPropertiesFile = new File(swacScenarioDir, "scenario.properties");
+		swacScenarioDir = new File(swacWorkDir, "uas");
+		swacScenarioXmlFile = new File(swacScenarioDir, "uas.xml");
+		swacScenarioPropertiesFile = new File(swacScenarioDir, "uas.properties");
 	}
 	
 	public static void initSystemProperties(String logLevel, String validationLevel, String genKml)

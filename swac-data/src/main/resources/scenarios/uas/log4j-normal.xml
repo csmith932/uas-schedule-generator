@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+	<!--
+		Copyright "TBD", Metron Aviation & CSSI. All rights reserved. This
+		computer Software was developed with the sponsorship of the U.S.
+		Government under Contract No. DTFAWA-10-D-00033, which has a copyright
+		license in accordance with AMS 3.5-13.(c)(1).
+	-->
+ 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="info" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="DEBUG_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="debug" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/debug/swac-debug.log" />
+        <param name="MaxFileSize" value="100MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="ERROR_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="error" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/swac-error.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: [%l] %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="FATAL" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="fatal" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="CONTROLLER_LOG" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="info" />
+        <param name="Append" value="false" />
+        <param name="file" value="${swac.work.dir}/scenarios/scenario/log/swac-controller.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss}: %-5p: %m%n" />
+        </layout>
+    </appender>
+	
+	<!-- ******************************************************************************
+		 * 																			  *
+		 * 								-LOGGERS-									  *  
+		 * 																			  *
+		 ****************************************************************************** -->
+	
+    <logger name="org.springframework">
+        <level value="warn" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="DEBUG_LOG" />
+        <appender-ref ref="ERROR_LOG" />
+        <appender-ref ref="FATAL" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.controller">
+        <level value="debug" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="CONTROLLER_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.trajectorymodeler">
+        <level value="debug" />
+        <appender-ref ref="CONTROLLER_LOG" />
+    </logger>
+
+    <logger name="gov.faa.ang.swac.simengine.multiprocess" additivity="false">
+        <level value="debug" />
+       <appender-ref ref="DEBUG_LOG" />
+    </logger>
+    
+    <root>
+        <level value="fatal" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+</log4j:configuration>

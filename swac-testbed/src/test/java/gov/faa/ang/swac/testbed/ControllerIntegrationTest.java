@@ -18,8 +18,8 @@ public class ControllerIntegrationTest {
 		ProjectFixture.initWorkDir();
 		
 		try {
-			ProjectFixture.createScenario("testScenario", "20130724", "2013", "base");
-			Bootstrap.main(new String[] { "testScenario" });
+			ProjectFixture.createScenario("uasOutput", "20130724", "2013", "base");
+			Bootstrap.main(new String[] { "uasOutput" });
 			
 		} catch (Exception e) { // Doesn't really matter what kind; we can't do much about it anyway.
 			e.printStackTrace();
