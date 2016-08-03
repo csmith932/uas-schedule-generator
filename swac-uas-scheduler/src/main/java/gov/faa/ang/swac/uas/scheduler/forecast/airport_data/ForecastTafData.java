@@ -18,7 +18,7 @@ public class ForecastTafData
     
     public final static boolean ADD_TO_DEFAULT = true;
 
-    public ForecastTafData(List<ForecastAirportCountsRecordTaf> recordSet, int baseFiscalYear, int forecastFiscalYear)
+    public ForecastTafData(List<ForecastAirportCountsRecord> recordSet, int baseFiscalYear, int forecastFiscalYear)
     {
     	for (ForecastAirportCountsRecord rec : recordSet)
     	{
@@ -41,16 +41,6 @@ public class ForecastTafData
     }
 
     /**
-     * Add a new year of TAF data.
-     * @param year
-     * @param tafDataMap
-     */
-    public void setYearData(Integer year, ForecastAirportCountsMap tafDataMap)
-    {
-        tafByYear.put(year, tafDataMap);
-    }
-
-    /**
      * Given a year, airport code, and 
      * {@link ForecastTripDistAirportDataCount} count data,
      * add the data to the map.
@@ -60,7 +50,7 @@ public class ForecastTafData
      * @param addToDefault if true, the default counts for the given
      * year's map are incremented by the input counts
      */
-    public void addYearData(
+    private void addYearData(
         Integer year, 
         String aprtCode, 
         ForecastTripDistAirportDataCount aprtCount, 
@@ -85,9 +75,5 @@ public class ForecastTafData
                 map.getDefaultData();
             defaultData.addAllData(aprtCount);
         }
-    }
-    
-    public void debugDumpTAF() { 
-    	System.out.println("have taf for years: " + tafByYear.keySet());    	
     }
 }

@@ -20,43 +20,6 @@ public class ForecastProcessor
     private ForecastCloner cloner;
     private ForecastUnitProcessor unitProcessor;   
 
-    /**
-     * Sorting airports by the number of ETMS operations.
-     * Sort order is DECREASING number of operations
-     */
-    private class CustomSortAirportOperations 
-        implements Comparator<ForecastTripDistAirportData> 
-    {
-        @Override
-    	public int compare(
-           ForecastTripDistAirportData apt1, 
-           ForecastTripDistAirportData apt2) 
-        {
-    		double nOps1 = 
-                apt1.getEtmsDep().getTotal()
-                +apt1.getEtmsArr().getTotal();
-    		double nOps2 = 
-                apt2.getEtmsDep().getTotal()
-                +apt2.getEtmsArr().getTotal();
-
-            // To do DECREASING order, 
-            // return -1 if already decreasing,
-            // return +1 if increasing, etc
-    		if(nOps2 < nOps1) 
-            {
-    			return -1;
-    		} 
-            else if  (nOps1 < nOps2) 
-            {
-    			return 1;
-    		} 
-            else 
-            {
-    			return 0;
-    		}
-    	}
-    }
-
     public ForecastProcessor(
         List<ForecastTripDistAirportData> airportDataList,
         ForecastTafData tafData,
@@ -65,9 +28,7 @@ public class ForecastProcessor
         ForecastUnitProcessor unitProcessor)
     {
         this.airportDataList    = airportDataList;
-        
         this.tafData            = tafData;
-        
         this.cloner             = cloner;       
         this.vfrCreator         = vfrCreator;        
         this.unitProcessor      = unitProcessor;
@@ -101,12 +62,6 @@ public class ForecastProcessor
                 airportList,
                 baseFiscalYear,
                 userClass);
-            
-            // Sort airports in DESCENDING order of total operations
-            // to help the integerization process.
-            Collections.sort(
-                airportList,
-                new CustomSortAirportOperations());
             
             // Forecast this user class & append the resulting flights
             List<ScheduleRecord> subResultList = this.unitProcessor.process(

@@ -89,17 +89,24 @@ public class ForecastTripDistributionDataLoader
             return false;
         }  
         
-        // 1. Departure must preceed arrival
+        // 1. Departure must precedpda arrival
         if (!schedRec.runwayOffTime.before(schedRec.runwayOnTime))
         {
             return false;   
         }
         
-        // 2. Reject flights completely outside of the window
+        // 2. Update flights completely outside of the window
         if (endTime.before(schedRec.runwayOffTime) || 
             schedRec.runwayOnTime.before(startTime))
         {
-            return false;   
+            // Our base schedule is for a different date. To add resilience, we update the date to coincide with the modeled base date
+        	Timestamp oldRunwayOffTime = schedRec.runwayOffTime;
+        	Timestamp oldRunwayOnTime = schedRec.runwayOnTime;
+        	long timeOfDay = oldRunwayOffTime.milliDifference(oldRunwayOffTime.truncateToDay());
+        	long deltaT = oldRunwayOnTime.milliDifference(oldRunwayOffTime);
+        	Timestamp startDay = startTime.truncateToDay();
+        	schedRec.runwayOffTime = startDay.milliAdd(timeOfDay);
+        	schedRec.runwayOnTime = schedRec.runwayOffTime.milliAdd(deltaT);
         }
         
         // 3. No flight is longer than 24 hours; specifically,

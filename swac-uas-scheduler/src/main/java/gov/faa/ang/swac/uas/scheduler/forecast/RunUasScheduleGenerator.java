@@ -17,7 +17,7 @@ import gov.faa.ang.swac.controller.core.CloneableAbstractTask;
 import gov.faa.ang.swac.datalayer.DataAccessException;
 import gov.faa.ang.swac.datalayer.storage.DataMarshaller;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf;
+import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord;
 
 public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
@@ -70,36 +70,12 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     private DataMarshaller tafAopsFile;
     // configuration:
     private double cloneTimeShiftStDev;
-    private double integerizationTolerance;
-    private int fratarMaxSteps;
-    private double fratarConvergenceCriteria;
     private int numHoursFromGMT;
     private int numDaysToForecast;
     // processor:
     private ForecastScheduleCreator scheduleGenerator;
     // outputData:
     private DataMarshaller forecastSchedule;
-    private DataMarshaller outputCountryRegionRecordList;
-    private DataMarshaller outputMergedAirportDataFile;
-    
-
-    public DataMarshaller getOutputMergedAirportDataFile() {
-		return outputMergedAirportDataFile;
-	}
-
-	public void setOutputMergedAirportDataFile(
-			DataMarshaller outputMergedAirportDataFile) {
-		this.outputMergedAirportDataFile = outputMergedAirportDataFile;
-	}
-
-	public DataMarshaller getOutputCountryRegionRecordList() {
-        return outputCountryRegionRecordList;
-    }
-
-    public void setOutputCountryRegionRecordList(
-            DataMarshaller outputCountryRegionRecordList) {
-        this.outputCountryRegionRecordList = outputCountryRegionRecordList;
-    }
 
     public RunUasScheduleGenerator() {  }
 
@@ -107,9 +83,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     	super(b);
         
         this.cloneTimeShiftStDev = b.cloneTimeShiftStDev;
-        this.integerizationTolerance = b.integerizationTolerance;
-        this.fratarMaxSteps = b.fratarMaxSteps;
-        this.fratarConvergenceCriteria = b.fratarConvergenceCriteria;
         this.numHoursFromGMT = b.numHoursFromGMT;
         this.numDaysToForecast = b.numDaysToForecast;
     }
@@ -144,30 +117,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
     public void setCloneTimeShiftStDev(double val) {
         this.cloneTimeShiftStDev = val;
-    }
-
-    public double getIntegerizationTolerance() {
-        return this.integerizationTolerance;
-    }
-
-    public void setIntegerizationTolerance(double val) {
-        this.integerizationTolerance = val;
-    }
-
-    public int getFratarMaxSteps() {
-        return this.fratarMaxSteps;
-    }
-
-    public void setFratarMaxSteps(int val) {
-        this.fratarMaxSteps = val;
-    }
-
-    public double getFratarConvergenceCriteria() {
-        return this.fratarConvergenceCriteria;
-    }
-
-    public void setFratarConvergenceCriteria(double val) {
-        this.fratarConvergenceCriteria = val;
     }
 
     public int getNumHoursFromGMT() {
@@ -241,7 +190,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
             // 7. Load forecasted TAF data ----------------------------------------------------------------------------
 
-            List<ForecastAirportCountsRecordTaf> forecastAirportCountsRecTafList = new ArrayList<ForecastAirportCountsRecordTaf>();
+            List<ForecastAirportCountsRecord> forecastAirportCountsRecTafList = new ArrayList<ForecastAirportCountsRecord>();
             logger.debug("loading airport forecast TAF counts...");
             this.tafAopsFile.load(forecastAirportCountsRecTafList);
 

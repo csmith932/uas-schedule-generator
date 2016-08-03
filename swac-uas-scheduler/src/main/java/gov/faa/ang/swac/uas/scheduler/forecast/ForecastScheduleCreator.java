@@ -62,7 +62,7 @@ public class ForecastScheduleCreator
 	// inputData:
     private List<ScheduleRecord> inputScheduleFile;
     private AirportDataMap mergedAirportDataFile;
-    private List<ForecastAirportCountsRecordTaf> tafAopsFile;
+    private List<ForecastAirportCountsRecord> tafAopsFile;
  
     // configuration:
     private double  cloneTimeShiftStDev;
@@ -92,12 +92,12 @@ public class ForecastScheduleCreator
         this.mergedAirportDataFile = val;
     }
 
-    public List<ForecastAirportCountsRecordTaf> getTafAopsFile()
+    public List<ForecastAirportCountsRecord> getTafAopsFile()
     {
         return this.tafAopsFile;
     }
 
-    public void setTafAopsFile(List<ForecastAirportCountsRecordTaf> val)
+    public void setTafAopsFile(List<ForecastAirportCountsRecord> val)
     {
         this.tafAopsFile = val;
     }
@@ -177,20 +177,6 @@ public class ForecastScheduleCreator
         //-----------------------------------------------------------------------------------------
  
         // Initialize random number generators
-        
-       
-        
-//        HQRandom temp = new HQRandom(12345678L); // this is the default but feel free to change it
-//        
-//        // For reproducibility, create 3 new streams with different entry
-//        // points using the temp generator. Keep references if you want to
-//        // manipulate the generators later (e.g., reset them to some particular
-//        // state or query for their internal states)
-//        
-//        HQRandom generator1 = new HQRandom(temp.nextLong());
-//        HQRandom generator2 = new HQRandom(temp.nextLong());
-//        HQRandom generator3 = new HQRandom(temp.nextLong());
-        
         
         HQRandom generator1 = new HQRandom(forecastClonerRandom);
         HQRandom generator2 = new HQRandom(scheduleClonerRandom);
