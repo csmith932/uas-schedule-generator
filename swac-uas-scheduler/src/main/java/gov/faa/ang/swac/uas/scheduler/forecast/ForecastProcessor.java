@@ -17,9 +17,7 @@ public class ForecastProcessor
     private List<ForecastTripDistAirportData> airportDataList;
 
     private ForecastTafData tafData;
-    private ForecastInternationalAirportDataAllYears internationalData;
     private ForecastAirportCountsMap opsnetData;   
-    private CountryRegionHash countryRegionHash;
     private ForecastVfrSchedRecCreator vfrCreator;
     private ForecastCloner cloner;
     private ForecastUnitProcessor unitProcessor;   
@@ -64,9 +62,7 @@ public class ForecastProcessor
     public ForecastProcessor(
         List<ForecastTripDistAirportData> airportDataList,
         ForecastTafData tafData,
-        ForecastInternationalAirportDataAllYears internationalData,
         ForecastAirportCountsMap opsnetData,
-        CountryRegionHash countryRegionHash,  
         ForecastCloner cloner,       
         ForecastVfrSchedRecCreator vfrCreator,
         ForecastUnitProcessor unitProcessor)
@@ -74,9 +70,7 @@ public class ForecastProcessor
         this.airportDataList    = airportDataList;
         
         this.tafData            = tafData;
-        this.internationalData  = internationalData;
         this.opsnetData         = opsnetData;
-        this.countryRegionHash  = countryRegionHash;
         
         this.cloner             = cloner;       
         this.vfrCreator         = vfrCreator;        
@@ -151,8 +145,6 @@ public class ForecastProcessor
                 airportList, 
                 removedAirportList, 
                 this.tafData.getYearData(forecastFiscalYear),
-                this.internationalData.getYearData(forecastFiscalYear),
-                this.countryRegionHash,
                 this.cloner,
                 userClass);
             resultList.addAll(subResultList); 
@@ -194,8 +186,6 @@ public class ForecastProcessor
             new WindowedFrcstVfrSchedRecCreator(
                 vfrCreator,    
                 tafData.getYearData(forecastFiscalYear),
-                internationalData.getYearData(forecastFiscalYear),
-                countryRegionHash,
                 startTime,
                 endTime);     
         windowedVfrCreator.createVfrFlights(
@@ -226,13 +216,6 @@ public class ForecastProcessor
             tafData.getYearData(baseFiscalYear), 
             ForecastAirportDataMerger.DATA_TAF_BASE, 
             userClass);
-        
-    	ForecastAirportDataMerger.mergeInternationalData(
-            airportList, 
-            internationalData.getYearData(baseFiscalYear),
-            ForecastAirportDataMerger.DATA_TAF_BASE,
-            countryRegionHash,
-            userClass);   
     }
     
     private void setBaselineData(
@@ -251,11 +234,5 @@ public class ForecastProcessor
             airportList, 
             tafData.getYearData(baseFiscalYear), 
             ForecastAirportDataMerger.DATA_TAF_BASE);
-        
-    	ForecastAirportDataMerger.mergeInternationalData(
-            airportList, 
-            internationalData.getYearData(baseFiscalYear),
-            ForecastAirportDataMerger.DATA_TAF_BASE,
-            countryRegionHash);  
     }
 }

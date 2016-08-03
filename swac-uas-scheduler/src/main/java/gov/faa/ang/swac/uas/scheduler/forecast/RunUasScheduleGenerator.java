@@ -20,8 +20,6 @@ import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
 import gov.faa.ang.swac.uas.scheduler.data.ASPMTaxiTimes.ASPMTaxiTimesRecord;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastInternationalAirportData;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord;
 
 public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
@@ -71,8 +69,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     // inputData:
     private DataMarshaller inputScheduleFile;
     private DataMarshaller aspmNominalTaxiTimesFile;
-    private DataMarshaller internationalCountryRegionMapFile;
-    private DataMarshaller internationalOpsCountsFile;
     private DataMarshaller mergedAirportDataFile;
     private DataMarshaller opsnetFile;
     private DataMarshaller tafAopsFile;
@@ -136,22 +132,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
     public void setAspmNominalTaxiTimesFile(DataMarshaller aspmNominalTaxiTimesFile) {
         this.aspmNominalTaxiTimesFile = aspmNominalTaxiTimesFile;
-    }
-
-    public DataMarshaller getInternationalCountryRegionMapFile() {
-        return this.internationalCountryRegionMapFile;
-    }
-
-    public void setInternationalCountryRegionMapFile(DataMarshaller internationalCountryRegionMapFile) {
-        this.internationalCountryRegionMapFile = internationalCountryRegionMapFile;
-    }
-
-    public DataMarshaller getInternationalOpsCountsFile() {
-        return this.internationalOpsCountsFile;
-    }
-
-    public void setInternationalOpsCountsFile(DataMarshaller internationalOpsCountsFile) {
-        this.internationalOpsCountsFile = internationalOpsCountsFile;
     }
 
     public DataMarshaller getMergedAirportDataFile() {
@@ -262,8 +242,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             // LOAD/READ
             // 1. flight plans
             // 2. ASPM taxi times
-            // 3. countries/regions
-            // 4. forecasted international ops data
             // 5. merged airport data
             // 6. forecasted OPSNET data
             // 7. forecasted TAF data
@@ -284,22 +262,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             this.aspmNominalTaxiTimesFile.load(aspmTaxiTimesRecordList);
 
             this.scheduleGenerator.setAspmNominalTaxiTimesFile(aspmTaxiTimesRecordList);
-
-            // 3. Load countries/regions -----------------------------------------------------------------------------
-
-            List<CountryRegionRecord> countryRegionRecordList = new ArrayList<CountryRegionRecord>();
-            logger.debug("loading country region records...");
-            this.internationalCountryRegionMapFile.load(countryRegionRecordList);
-
-            this.scheduleGenerator.setInternationalCountryRegionMapFile(countryRegionRecordList);
-
-            // 4. Load forecasted international ops data --------------------------------------------------------------
-
-            List<ForecastInternationalAirportData> forecastIntlAirportDataList = new ArrayList<ForecastInternationalAirportData>();
-            logger.debug("loading international airport forecast data...");
-            this.internationalOpsCountsFile.load(forecastIntlAirportDataList);
-
-            this.scheduleGenerator.setInternationalOpsCountsFile(forecastIntlAirportDataList);
 
             // 5. Load merged airport data ----------------------------------------------------------------------------
             // Uses a list, but there is only one AirportDataMap object.
@@ -344,8 +306,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
             logger.debug("saving forecast schedule records...");
             this.forecastSchedule.save(forecastSchedRecList);
-            logger.debug("saving country region records...");
-            this.outputCountryRegionRecordList.save(countryRegionRecordList);
             logger.debug("saving airport data file records...");
             this.outputMergedAirportDataFile.save(airportDataMapList);
 
@@ -354,8 +314,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             //---------------------------------------------------------------------------------------------------------
             this.scheduleGenerator.setInputScheduleFile(null);
             this.scheduleGenerator.setAspmNominalTaxiTimesFile(null);
-            this.scheduleGenerator.setInternationalCountryRegionMapFile(null);
-            this.scheduleGenerator.setInternationalOpsCountsFile(null);
             this.scheduleGenerator.setMergedAirportDataFile(null);
             this.scheduleGenerator.setOpsnetFile(null);
             this.scheduleGenerator.setTafAopsFile(null);
@@ -376,7 +334,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     public boolean validate(VALIDATION_LEVEL level) {
         boolean retval = false;
 
-        retval = validateFiles(new DataMarshaller[]{inputScheduleFile, aspmNominalTaxiTimesFile, internationalCountryRegionMapFile, internationalOpsCountsFile,
+        retval = validateFiles(new DataMarshaller[]{inputScheduleFile, aspmNominalTaxiTimesFile,
                     mergedAirportDataFile, opsnetFile, tafAopsFile}, level);
         return retval;
     }

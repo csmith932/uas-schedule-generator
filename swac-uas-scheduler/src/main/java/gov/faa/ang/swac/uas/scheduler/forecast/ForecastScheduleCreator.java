@@ -63,8 +63,6 @@ public class ForecastScheduleCreator
 	// inputData:
     private List<ScheduleRecord> inputScheduleFile;
     private List<ASPMTaxiTimes.ASPMTaxiTimesRecord> aspmNominalTaxiTimesFile;
-    private List<CountryRegionHash.CountryRegionRecord> internationalCountryRegionMapFile;
-    private List<ForecastInternationalAirportData> internationalOpsCountsFile;
     private AirportDataMap mergedAirportDataFile;
     private List<ForecastAirportCountsRecord> opsnetFile;
     private List<ForecastAirportCountsRecordTaf> tafAopsFile;
@@ -98,25 +96,6 @@ public class ForecastScheduleCreator
     public void setAspmNominalTaxiTimesFile(List<ASPMTaxiTimes.ASPMTaxiTimesRecord> val)
     {
         this.aspmNominalTaxiTimesFile = val;
-    }
-    public List<CountryRegionHash.CountryRegionRecord> getInternationalCountryRegionMapFile()
-    {
-        return this.internationalCountryRegionMapFile;
-    }
-
-    public void setInternationalCountryRegionMapFile(List<CountryRegionHash.CountryRegionRecord> val)
-    {
-        this.internationalCountryRegionMapFile = val;
-    }
-    
-    public List<ForecastInternationalAirportData> getInternationalOpsCountsFile()
-    {
-        return this.internationalOpsCountsFile;
-    }
-
-    public void setInternationalOpsCountsFile(List<ForecastInternationalAirportData> val)
-    {
-        this.internationalOpsCountsFile = val;
     }
     
     public AirportDataMap getMergedAirportDataFile()
@@ -241,20 +220,6 @@ public class ForecastScheduleCreator
             this.aspmNominalTaxiTimesFile,
             yyyymm);
         
-        final CountryRegionHash countryRegionHash = new CountryRegionHash(
-            this.internationalCountryRegionMapFile);
-        
-        final ForecastInternationalAirportDataAllYears allIntl = 
-            new ForecastInternationalAirportDataAllYears();
-        for (ForecastInternationalAirportData rec : this.internationalOpsCountsFile)
-        {
-            int year = rec.getYear();
-            if (year == forecastFiscalYear || year == baseFiscalYear)
-            {
-                allIntl.setYearData(year,rec);
-            }
-        }
-        
         final ForecastAirportCountsMap opsnetData = new ForecastAirportCountsMap(
             this.opsnetFile,
             yyyymmdd);
@@ -321,32 +286,16 @@ public class ForecastScheduleCreator
         forecastCloner.setCloneTimeShiftStDev(
             cloneTimeShiftStDev);
 
-        /*ForecastUnitProcessor unitProcessor = 
-            new ForecastUnitProcessor(
-                integerizationTolerance,
-                fratarMaxSteps,
-                fratarConvergenceCriteria);*/
         ForecastUnitProcessor unitProcessor = 
             new ForecastUnitProcessor(
                 integerizationTolerance,
                 fratarMaxSteps,
                 fratarConvergenceCriteria);
         
-        /*ForecastProcessor processor = new ForecastProcessor(
-            airportDataList,
-            allTafData,
-            allIntl,
-            opsnetData,
-            countryRegionHash,
-            vfrLoader,
-            unitProcessor,
-            forecastCloner);*/
         ForecastProcessor processor = new ForecastProcessor(
             airportDataList,
             allTafData,
-            allIntl,
             opsnetData,
-            countryRegionHash,
             forecastCloner,    
             vfrLoader,
             unitProcessor);

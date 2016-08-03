@@ -1,19 +1,15 @@
 package gov.faa.ang.swac.uas.scheduler.forecast;
 
-import gov.faa.ang.swac.common.datatypes.Timestamp;
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
 import gov.faa.ang.swac.uas.scheduler.forecast.UserClassDataSplitter.UserClass;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.CountryRegionHash;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsMap;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportDataMerger;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastInternationalAirportData;
 import gov.faa.ang.swac.uas.scheduler.forecast.clone.ForecastCloner;
 import gov.faa.ang.swac.uas.scheduler.forecast.merge.ForecastFlightListMerger;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAprtProjGenerator;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistribution;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ForecastUnitProcessor
@@ -42,8 +38,6 @@ public class ForecastUnitProcessor
         List<ForecastTripDistAirportData> retainedAirportList,
         List<ForecastTripDistAirportData> removedAirportList,       
         ForecastAirportCountsMap tafData,
-        ForecastInternationalAirportData internationalData,
-        CountryRegionHash countryRegionHash,
         ForecastCloner cloner,
         UserClass userClass) 
     {
@@ -53,12 +47,6 @@ public class ForecastUnitProcessor
             retainedAirportList, 
             tafData,
             ForecastAirportDataMerger.DATA_TAF_FORECAST, 
-            userClass);
-        ForecastAirportDataMerger.mergeInternationalData(
-            retainedAirportList, 
-            internationalData, 
-            ForecastAirportDataMerger.DATA_TAF_FORECAST,
-            countryRegionHash,
             userClass);
         
         // BUG? Robert Lakatos did not include this line:

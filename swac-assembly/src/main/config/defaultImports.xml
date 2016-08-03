@@ -67,18 +67,6 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
 		<property name="resourceName" value="aspm_nominal_taxi_times.csv"/>
 		<property name="readOnly" value="true"/>
     </bean>
-    <bean id="international_country_region_map" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord"/>
-		<property name="location" value="DATA"/>
-		<property name="resourceName" value="international_country_region_map.txt"/>
-		<property name="readOnly" value="true"/>
-    </bean>
-    <bean id="international_ops_counts" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastInternationalAirportData"/>
-		<property name="location" value="DATA"/>
-		<property name="resourceName" value="international_ops_counts.csv"/>
-		<property name="readOnly" value="true"/>
-    </bean>
     <bean id="merged_airport_data" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
 		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap"/>
 		<property name="location" value="DATA"/>

@@ -81,63 +81,6 @@ public class ForecastAirportDataMerger
         }
     }    
     
-    public static void mergeInternationalData(
-        List<ForecastTripDistAirportData> airportList,
-        ForecastInternationalAirportData data,
-        int dataType, 
-        CountryRegionHash countryRegionHash)
-    {
-        mergeInternationalData(
-            airportList,
-            data,
-            dataType, 
-            countryRegionHash,
-            null);
-    }
-
-    public static void mergeInternationalData(
-        List<ForecastTripDistAirportData> airportList,
-        ForecastInternationalAirportData data,
-        int dataType, 
-        CountryRegionHash countryRegionHash,
-        UserClassDataSplitter.UserClass userClass)
-    {
-        for(ForecastTripDistAirportData airport : airportList)
-        {
-        	REGION region = countryRegionHash.getRegion(airport);
-            
-            Double count = data.getRegionCount(region);
-            if (count != null)
-            {
-                ForecastTripDistAirportDataCount counts = null;
-                if (userClass == null)
-                {
-                   counts = new ForecastTripDistAirportDataCount(count,count,count); 
-                }
-                else
-                {
-                    switch (userClass) 
-                    {
-                        case GA:
-                            counts = new ForecastTripDistAirportDataCount(count,0,0);
-                            break;
-                            
-                        case MIL:
-                            counts = new ForecastTripDistAirportDataCount(0,count,0);
-                            break;
-                            
-                        case OTHER: 
-                            counts = new ForecastTripDistAirportDataCount(0,0,count);
-                            break;
-                        default : 
-                        break;
-                    }
-                }
-                assign(airport,counts,dataType);
-            }
-        }
-    }    
-    
     private static void assign(
         ForecastTripDistAirportData airport,
         ForecastTripDistAirportDataCount counts, 

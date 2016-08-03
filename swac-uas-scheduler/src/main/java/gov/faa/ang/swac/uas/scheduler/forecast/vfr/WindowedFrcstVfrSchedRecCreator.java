@@ -2,10 +2,8 @@ package gov.faa.ang.swac.uas.scheduler.forecast.vfr;
 
 import gov.faa.ang.swac.common.datatypes.Timestamp;
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.CountryRegionHash;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsMap;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportDataMerger;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastInternationalAirportData;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
 
 import java.util.ArrayList;
@@ -17,8 +15,6 @@ public class WindowedFrcstVfrSchedRecCreator
 {
 	private ForecastVfrSchedRecCreator vfrSchedRecCreator;    
 	private ForecastAirportCountsMap tafData;
-	private ForecastInternationalAirportData intlData;
-    private CountryRegionHash countryRegionHash;
 	private Timestamp wndStartTime;
 	private Timestamp wndEndTime;
     
@@ -27,15 +23,11 @@ public class WindowedFrcstVfrSchedRecCreator
 	public WindowedFrcstVfrSchedRecCreator(
         ForecastVfrSchedRecCreator vfrCreator,    
         ForecastAirportCountsMap tafData,
-        ForecastInternationalAirportData intlData,
-        CountryRegionHash countryRegionHash,
         Timestamp startTime,
         Timestamp endTime)
     {
         this.vfrSchedRecCreator = vfrCreator;    
         this.tafData            = tafData;
-        this.intlData           = intlData;
-        this.countryRegionHash  = countryRegionHash;
         
         this.wndStartTime       = startTime;
         this.wndEndTime         = endTime;
@@ -51,11 +43,6 @@ public class WindowedFrcstVfrSchedRecCreator
             airportList, 
             tafData, 
             ForecastAirportDataMerger.DATA_TAF_FORECAST);
-        ForecastAirportDataMerger.mergeInternationalData(
-            airportList, 
-            intlData, 
-            ForecastAirportDataMerger.DATA_TAF_FORECAST,
-            countryRegionHash);
 		
 		countWindowedFlightsByAirports(
             airportList,
