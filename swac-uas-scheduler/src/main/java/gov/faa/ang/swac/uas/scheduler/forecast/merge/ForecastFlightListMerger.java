@@ -6,7 +6,6 @@ import gov.faa.ang.swac.uas.scheduler.forecast.clone.ForecastCloner;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -50,13 +49,11 @@ public class ForecastFlightListMerger
     
     public static List<ScheduleRecord> merge(
         List<ForecastTripDistAirportData> airportList,
-        ForecastCloner cloner,        
-        List<ForecastTripDistAirportData> removedAirportList)
+        ForecastCloner cloner)
     {
         List<ScheduleRecord> results = new ArrayList<ScheduleRecord>();
         
         results.addAll(getFlightsByAirport(airportList,cloner));
-        results.addAll(getFlightsFromRemovedAirports(removedAirportList));
         
         return results;
     }

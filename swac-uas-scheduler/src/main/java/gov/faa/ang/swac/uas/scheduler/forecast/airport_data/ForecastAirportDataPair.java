@@ -24,20 +24,9 @@ public class ForecastAirportDataPair extends AirportDataPair
     implements Comparable<ForecastAirportDataPair>
 {
     private ForecastTripDistAirportDataCount countByClass;
-    private double projectedFlightCountRaw;
     private double projectedFlightCountFinal;
     private Map<Integer,ScheduleRecord> flights;
-    private int numClonesToMake;
     
-    /**
-     * Default Constructor.
-     */
-    private ForecastAirportDataPair()
-    {
-        countByClass = new ForecastTripDistAirportDataCount();
-        flights = new LinkedHashMap<Integer,ScheduleRecord>();
-    }
-
     /**
      * Constructor given a departure and an arrival airport.
      * @param origin
@@ -48,25 +37,6 @@ public class ForecastAirportDataPair extends AirportDataPair
         super(origin,destin);
         countByClass = new ForecastTripDistAirportDataCount();
         flights = new LinkedHashMap<Integer,ScheduleRecord>();
-    }
-
-    /**
-     * Constructor given departure and arrival airports and flight count data.
-     * @param deptAprt
-     * @param arrAprt
-     * @param flightCount
-     * @param projectedFlightCountRaw
-     * @param projectedFlightCountFinal
-     */
-    public ForecastAirportDataPair(AirportData deptAprt, AirportData arrAprt,
-        double flightCount, double projectedFlightCountRaw, double projectedFlightCountFinal)
-    {
-        super(deptAprt, arrAprt);
-        this.projectedFlightCountRaw = projectedFlightCountRaw;
-        this.projectedFlightCountFinal = projectedFlightCountFinal;
-        
-        countByClass = new ForecastTripDistAirportDataCount();
-        countByClass.setNumOther(flightCount);
     }
 
     /**
@@ -83,27 +53,11 @@ public class ForecastAirportDataPair extends AirportDataPair
     }
 
     /**
-     * Set the projected number of flights.
-     * @param projectedFlightCountRaw
-     */
-    public void setProjectedFlightCountRaw(double projectedFlightCountRaw)
-    {
-        this.projectedFlightCountRaw = projectedFlightCountRaw;
-    }
-
-    /**
-     * @return the projected number of flights
-     */
-    public double getProjectedFlightCountRaw()
-    {
-        return projectedFlightCountRaw;
-    }
-
-    /**
      * Set the final number of projected flights.  This is actually most likely
      * an integer and set after the Integerization process.
      * @param projectedFlightCountFinal
      */
+    // TODO: CSS This needs to be set as the sum of operations from projectedTotalDep and/or projectedTotalArr, which would have been done implicity by Fratar if the coefficients and ops were already balanced
     public void setProjectedFlightCountFinal(double projectedFlightCountFinal)
     {
         this.projectedFlightCountFinal = projectedFlightCountFinal;
@@ -119,23 +73,6 @@ public class ForecastAirportDataPair extends AirportDataPair
     }
 
     /**
-     * Increment the final projected flight count.
-     */
-    public void incrementProjectedFlightCountFinal()
-    {
-        projectedFlightCountFinal++;
-    }
-
-    /**
-     * Set the initial flight count broken out by class.
-     * @param countByClass
-     */
-    public void setCountByClass(ForecastTripDistAirportDataCount countByClass)
-    {
-        this.countByClass = countByClass;
-    }
-
-    /**
      * @return the initial flight count broken out by class
      */
     public ForecastTripDistAirportDataCount getCountByClass()
@@ -143,21 +80,6 @@ public class ForecastAirportDataPair extends AirportDataPair
         return countByClass;
     }
 
-    public void setNumClonesToMake(int numClonesToMake) 
-    {
-		this.numClonesToMake = numClonesToMake;
-	}
-    
-	public int getNumClonesToMake() 
-    {
-		return numClonesToMake;
-	}
-
-	public void decrementNumClonesToMake() 
-    {
-		--this.numClonesToMake;
-	}
-    
     /**
      * Add a {@link ScheduleRecord} to the city pair.
      * @param schedRec
@@ -201,15 +123,6 @@ public class ForecastAirportDataPair extends AirportDataPair
     }
 
     /**
-     * @return the difference between the raw and final projected
-     * flight counts
-     */
-    public double getRemainderProjectedRaw()
-    {
-        return (projectedFlightCountRaw - projectedFlightCountFinal);
-    }
-
-    /**
      * Used for sorting.  The order is descending by the output of
      * {@link #getRemainderProjectedRaw}.
      * @param o
@@ -218,11 +131,7 @@ public class ForecastAirportDataPair extends AirportDataPair
     @Override
     public int compareTo(ForecastAirportDataPair o)
     {
-        // want sorting by remainder from large to small
-        Double remainderThis = getRemainderProjectedRaw();
-        Double remainderThat = o.getRemainderProjectedRaw();
-        
-        return -remainderThis.compareTo(remainderThat);
+        return Double.compare(this.projectedFlightCountFinal, o.projectedFlightCountFinal);
     }
     
     public void clear() 

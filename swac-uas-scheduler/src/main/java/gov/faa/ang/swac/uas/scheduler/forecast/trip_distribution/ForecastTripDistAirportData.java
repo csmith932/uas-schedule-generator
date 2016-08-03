@@ -26,17 +26,6 @@ public class ForecastTripDistAirportData extends AirportData
         projectedTotalDep,
         projectedTotalArr;
     private double 
-        calculatedTotalDep,
-        calculatedTotalArr;
-    private int 
-        calcIntDep,
-        calcIntArr;
-    private double 
-        oldDepCoeff,
-        newDepCoeff,
-        oldArrCoeff,
-        newArrCoeff;
-    private double 
         windowZ9Arrs,
         windowZ9Deps;
     
@@ -84,16 +73,7 @@ public class ForecastTripDistAirportData extends AirportData
         
         this.projectedTotalDep  = 0;
         this.projectedTotalArr  = 0;
-        this.calculatedTotalDep = 0;
-        this.calculatedTotalArr = 0;
-        this.calcIntDep         = 0;
-        this.calcIntArr         = 0;
         
-        this.oldDepCoeff        = 1;
-        this.newDepCoeff        = 1;
-        this.oldArrCoeff        = 1;
-        this.newArrCoeff        = 1;
-
         this.windowZ9Arrs       = 0;
         this.windowZ9Deps       = 0;
     }
@@ -104,19 +84,9 @@ public class ForecastTripDistAirportData extends AirportData
     	this.windowedDeps   = 0;
     }
     
-    public void setEtmsDep(ForecastTripDistAirportDataCount etmsDep)
-    {
-        this.etmsDep = etmsDep;
-    }
-
     public ForecastTripDistAirportDataCount getEtmsDep()
     {
         return etmsDep;
-    }
-
-    public void setEtmsArr(ForecastTripDistAirportDataCount etmsArr)
-    {
-        this.etmsArr = etmsArr;
     }
 
     public ForecastTripDistAirportDataCount getEtmsArr()
@@ -149,11 +119,6 @@ public class ForecastTripDistAirportData extends AirportData
         this.opsnetBase = opsnetBase;
     }
 
-    public ForecastTripDistAirportDataCount getOpsnetBase()
-    {
-        return opsnetBase;
-    }
-
     public void setInitialTotalDep(double initTotalDeps)
     {
         this.initTotalDeps = initTotalDeps;
@@ -173,11 +138,6 @@ public class ForecastTripDistAirportData extends AirportData
     {
         return initTotalArrs;
     }   
-
-    public void setInitialRemovedOperations(double initRemovedOps)
-    {
-        this.initRemovedOps = initRemovedOps;
-    }
 
     public double getInitialRemovedOperations()
     {
@@ -204,98 +164,9 @@ public class ForecastTripDistAirportData extends AirportData
         return projectedTotalArr;
     }
 
-    public void setCalculatedTotalDep(double calculatedTotalDep)
-    {
-        this.calculatedTotalDep = calculatedTotalDep;
-    }
-
-    public double getCalculatedTotalDep()
-    {
-        return calculatedTotalDep;
-    }
-
-    public void setCalculatedTotalArr(double calculatedTotalArr)
-    {
-        this.calculatedTotalArr = calculatedTotalArr;
-    }
-
-    public double getCalculatedTotalArr()
-    {
-        return calculatedTotalArr;
-    }
-
-    public void setCalcIntDep(int calcIntDep)
-    {
-        this.calcIntDep = calcIntDep;
-    }
-
-    public int getCalcIntDep()
-    {
-        return calcIntDep;
-    }
-
-    public void setCalcIntArr(int calcIntArr)
-    {
-        this.calcIntArr = calcIntArr;
-    }
-    public int getCalcIntArr()
-    {
-        return calcIntArr;
-    }
-
-    public void setOldDepCoeff(double oldDepCoeff)
-    {
-        this.oldDepCoeff = oldDepCoeff;
-    }
-
-    public double getOldDepCoeff()
-    {
-        return oldDepCoeff;
-    }
-
-    public void setNewDepCoeff(double newDepCoeff)
-    {
-        this.newDepCoeff = newDepCoeff;
-    }
-
-    public double getNewDepCoeff()
-    {
-        return newDepCoeff;
-    }
-
-    public void setOldArrCoeff(double oldArrCoeff)
-    {
-        this.oldArrCoeff = oldArrCoeff;
-    }
-
-    public double getOldArrCoeff()
-    {
-        return oldArrCoeff;
-    }
-
-    public void setNewArrCoeff(double newArrCoeff)
-    {
-        this.newArrCoeff = newArrCoeff;
-    }
-
-    public double getNewArrCoeff()
-    {
-        return newArrCoeff;
-    }   
-    
-    public void setWindowZ9Arrs(double windowZ9Arrs)
-    {
-        this.windowZ9Arrs = windowZ9Arrs;
-    }
-
     public double getWindowZ9Arrs()
     {
         return windowZ9Arrs;
-    }
-
-    public void setWindowZ9Deps(double windowZ9Deps)
-    {
-        this.windowZ9Arrs = windowZ9Deps;
     }
 
     public double getWindowZ9Deps()
@@ -303,19 +174,9 @@ public class ForecastTripDistAirportData extends AirportData
         return windowZ9Deps;
     }
     
-    public void setWindowedArrivals(int windowedArrs)
-    {
-        this.windowedArrs = windowedArrs;
-    }
-    
     public int getWindowedArrivals() 
     {
     	return this.windowedArrs;
-    }
-    
-    public void setWindowedDepartures(int windowedDeps)
-    {
-        this.windowedDeps = windowedDeps;
     }
     
     public int getWindowedDepartures() 
@@ -341,42 +202,6 @@ public class ForecastTripDistAirportData extends AirportData
             +destin.getMostLikelyCode();
     }
     
-    private String createKey(ForecastAirportDataPair pair)
-    {
-        return createKey(pair.getOrigin(),pair.getDestination());
-    }
-
-    public void addCityPair(ForecastAirportDataPair pair)
-    {
-        String key = createKey(pair);
-        
-        if (this == pair.getOrigin())
-        {
-            if(goingTo.containsKey(key))
-            {
-                goingTo.get(key).getCountByClass().addAllData(
-                    pair.getCountByClass());
-            }
-            else
-            {
-                goingTo.put(key,pair);
-            }
-        }
-        
-        if (this == pair.getDestination())
-        {
-            if(comingFrom.containsKey(key))
-            {
-                comingFrom.get(key).getCountByClass().addAllData(
-                    pair.getCountByClass());
-            }
-            else
-            {
-                comingFrom.put(key,pair);
-            }
-        }
-    }
-
     public void addDepartureGoingTo(
         ForecastTripDistAirportData destin,
         ScheduleRecord schedRec)
@@ -444,80 +269,6 @@ public class ForecastTripDistAirportData extends AirportData
         }
     }
 
-    public boolean isSource()
-    {
-        return comingFrom.isEmpty();
-    }
-   
-    public boolean isSink()
-    {
-        return goingTo.isEmpty();
-    }
-
-    public boolean isSourceOrSink()
-    {
-        return isSource() || isSink();
-    }
-
-    /*public boolean isSourceAndSink()
-    {
-        return isSource() && isSink();
-    }*/
-
-    public void removeConnectedPairs()
-    {
-        for(ForecastAirportDataPair pair : comingFrom.values())
-        {
-            ForecastTripDistAirportData airport = 
-                (ForecastTripDistAirportData)pair.getOrigin();
-            boolean removed = airport.removePair(pair);
-            if(!removed)
-            {
-                System.out.println(
-                    "Didn't remove " + airport.getMostLikelyCode() +
-                    " to " + getMostLikelyCode());
-            }
-        }
-        
-        for(ForecastAirportDataPair pair : goingTo.values())
-        {
-            ForecastTripDistAirportData airport = 
-                (ForecastTripDistAirportData)pair.getDestination();
-            boolean removed = airport.removePair(pair);
-            if(!removed)
-            {
-                System.out.println(
-                    "didn't remove " + getMostLikelyCode() + 
-                    " to " + airport.getMostLikelyCode());
-            }
-        }
-    }
-    
-    private boolean removePair(ForecastAirportDataPair pair)
-    {
-        String key = createKey(pair);      
-        
-        ForecastAirportDataPair removedPair = null;
-        
-        if (this == pair.getOrigin())
-        {
-            removedPair = goingTo.remove(key);
-        }
-        
-        if (this == pair.getDestination())
-        {
-            removedPair = comingFrom.remove(key);
-        }
-
-        if (removedPair != null)
-        {
-            initRemovedOps += removedPair.getInitialFlightCount();
-            return true;
-        }         
-        
-        return false;
-    }
-
     public double getProjectedOpsnet()
     {
         double projectedOpsnet = opsnetBase.getTotal();
@@ -532,16 +283,6 @@ public class ForecastTripDistAirportData extends AirportData
         return projectedOpsnet;
     }
 
-    public void addZ9Arrivals(double addZ9ArrCount)
-    {
-        this.windowZ9Arrs += addZ9ArrCount;
-    }
-
-    public void addZ9Departures(double addZ9DepCount)
-    {
-        this.windowZ9Deps += addZ9DepCount;
-    }
-    
     public void addToWindowedArrivals(int count) 
     {
     	this.windowedArrs += count;
@@ -555,7 +296,7 @@ public class ForecastTripDistAirportData extends AirportData
     public int getVfrCountToAdd()
     {
         double cloneCount =
-            (getCalcIntDep()+getCalcIntArr())
+            (getProjectedTotalDep()+getProjectedTotalArr())
             -(getInitialTotalArr()+getInitialTotalDep());
         
         double z9Counts = 
@@ -598,24 +339,4 @@ public class ForecastTripDistAirportData extends AirportData
     	} 
     	comingFrom.clear();
     }
-
-	public int getDepCountToClone() 
-    {
-		int n = 0;
-		for (ForecastAirportDataPair pair : goingTo.values()) 
-        {
-    		n += java.lang.Math.max(0,pair.getNumClonesToMake());
-    	}
-		return n;
-	}
-
-	public int getArrCountToClone()
-    {
-		int n = 0;
-		for (ForecastAirportDataPair pair : comingFrom.values()) 
-        {
-    		n += java.lang.Math.max(0,pair.getNumClonesToMake());
-    	}
-		return n;
-	}
 }

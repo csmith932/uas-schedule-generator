@@ -6,7 +6,6 @@ import gov.faa.ang.swac.uas.scheduler.forecast.UserClassDataSplitter.UserClass;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.*;
 import gov.faa.ang.swac.uas.scheduler.forecast.clone.ForecastCloner;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
-import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportRemover;
 import gov.faa.ang.swac.uas.scheduler.forecast.vfr.ForecastVfrSchedRecCreator;
 import gov.faa.ang.swac.uas.scheduler.forecast.vfr.WindowedFrcstVfrSchedRecCreator;
 
@@ -124,10 +123,6 @@ public class ForecastProcessor
             List<ForecastTripDistAirportData> airportList = 
                 splitter.getAirportList(userClass);
             
-            // Remove sinks & sources from the airport network
-            List<ForecastTripDistAirportData> removedAirportList = 
-                ForecastTripDistAirportRemover.removeSinksAndSources(airportList);
-            
             // Set the baseline data in the airport data
             setBaselineData(
                 airportList,
@@ -143,7 +138,6 @@ public class ForecastProcessor
             // Forecast this user class & append the resulting flights
             List<ScheduleRecord> subResultList = this.unitProcessor.process(
                 airportList, 
-                removedAirportList, 
                 this.tafData.getYearData(forecastFiscalYear),
                 this.cloner,
                 userClass);
@@ -156,19 +150,6 @@ public class ForecastProcessor
         
         // Setup baseline data for VFR --------------------------------------------------------------------------------
         
-        // Remove the sink & source airports, but DO NOT save this list
-		List<ForecastTripDistAirportData> removedAirportList = 
-            ForecastTripDistAirportRemover.removeSinksAndSources(airportDataList);
-        
-        // Discard removed airport data
-        for (ForecastTripDistAirportData data : removedAirportList) 
-        {
-        	data.clear();
-        }
-        removedAirportList.clear();
-        removedAirportList = null;       
-        
-        // Setup the baseline data for VFR
 		setBaselineData(
             airportDataList,
             baseFiscalYear);

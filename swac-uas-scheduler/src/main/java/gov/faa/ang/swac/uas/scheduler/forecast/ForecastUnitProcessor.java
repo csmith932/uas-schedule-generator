@@ -36,7 +36,6 @@ public class ForecastUnitProcessor
 
     public List<ScheduleRecord> process(
         List<ForecastTripDistAirportData> retainedAirportList,
-        List<ForecastTripDistAirportData> removedAirportList,       
         ForecastAirportCountsMap tafData,
         ForecastCloner cloner,
         UserClass userClass) 
@@ -55,11 +54,8 @@ public class ForecastUnitProcessor
             retainedAirportList);*/
         
         ForecastTripDistribution tripDistributor =
-            new ForecastTripDistribution(integerizationTolerance);
-        tripDistributor.distributeTrips(
-            retainedAirportList,
-            fratarMaxSteps,
-            fratarConvergenceCriteria);
+            new ForecastTripDistribution();
+        tripDistributor.distributeTrips(retainedAirportList);
        
         cloner.clearFlightLists();
         cloner.cloneFlights(retainedAirportList);
@@ -68,8 +64,7 @@ public class ForecastUnitProcessor
         // Merge the retained and removed flights
         List<ScheduleRecord> schedRecList = ForecastFlightListMerger.merge(
             retainedAirportList,
-            cloner,
-            removedAirportList);
+            cloner);
 
         return schedRecList;
 	}

@@ -1,6 +1,5 @@
 package gov.faa.ang.swac.uas.scheduler.forecast.airport_data;
 
-import gov.faa.ang.swac.common.datatypes.REGION;
 import gov.faa.ang.swac.uas.scheduler.forecast.UserClassDataSplitter;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportDataCount;
