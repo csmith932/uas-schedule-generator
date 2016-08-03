@@ -22,7 +22,6 @@ import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCount
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastInternationalAirportData;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord;
-import gov.faa.ang.swac.uas.scheduler.vfr.VFRHelicopterMap;
 
 public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
@@ -77,7 +76,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     private DataMarshaller mergedAirportDataFile;
     private DataMarshaller opsnetFile;
     private DataMarshaller tafAopsFile;
-    private DataMarshaller vfrHelicopterPercentFile;
     // configuration:
     private double cloneTimeShiftStDev;
     private double integerizationTolerance;
@@ -180,14 +178,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
         this.tafAopsFile = tafAopsFile;
     }
 
-    public DataMarshaller getVfrHelicopterPercentFile() {
-        return this.vfrHelicopterPercentFile;
-    }
-
-    public void setVfrHelicopterPercentFile(DataMarshaller vfrHelicopterPercentFile) {
-        this.vfrHelicopterPercentFile = vfrHelicopterPercentFile;
-    }
-
     public double getCloneTimeShiftStDev() {
         return this.cloneTimeShiftStDev;
     }
@@ -277,7 +267,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             // 5. merged airport data
             // 6. forecasted OPSNET data
             // 7. forecasted TAF data
-            // 8. VFR helicopter percents
             //---------------------------------------------------------------------------------------------------------
 
             // 1. Load schedule records -------------------------------------------------------------------------------
@@ -337,15 +326,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
             this.scheduleGenerator.setTafAopsFile(forecastAirportCountsRecTafList);
 
-            // 8. Load VFR helicopter percents ------------------------------------------------------------------------
-            // Uses a list, but there is only one VFRHelicopterMap object.
-
-            List<VFRHelicopterMap> vfrHelicopterMapList = new ArrayList<VFRHelicopterMap>(1);
-            logger.debug("loading VFR helicopter data...");
-            this.vfrHelicopterPercentFile.load(vfrHelicopterMapList);
-
-            this.scheduleGenerator.setVfrHelicopterPercentFile(vfrHelicopterMapList.get(0));
-
             //---------------------------------------------------------------------------------------------------------
             // PROCESS
             //---------------------------------------------------------------------------------------------------------
@@ -379,7 +359,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             this.scheduleGenerator.setMergedAirportDataFile(null);
             this.scheduleGenerator.setOpsnetFile(null);
             this.scheduleGenerator.setTafAopsFile(null);
-            this.scheduleGenerator.setVfrHelicopterPercentFile(null);
 
             this.scheduleGenerator.setOutputScheduleFile(null);
         } catch (DataAccessException ex) {
@@ -398,7 +377,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
         boolean retval = false;
 
         retval = validateFiles(new DataMarshaller[]{inputScheduleFile, aspmNominalTaxiTimesFile, internationalCountryRegionMapFile, internationalOpsCountsFile,
-                    mergedAirportDataFile, opsnetFile, tafAopsFile, vfrHelicopterPercentFile}, level);
+                    mergedAirportDataFile, opsnetFile, tafAopsFile}, level);
         return retval;
     }
 }

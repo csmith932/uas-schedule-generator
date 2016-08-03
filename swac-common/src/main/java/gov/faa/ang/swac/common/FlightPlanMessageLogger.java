@@ -34,7 +34,6 @@ public class FlightPlanMessageLogger
 	public enum Reason
 	{
 		DUPLICATE_SCHEDULE_ID		{ @Override public Level logLevel() { return Level.DEBUG; } @Override public String message() { return "has a duplicate schedule ID"; } },
-		HELICOPTER                  { @Override public Level logLevel() { return Level.DEBUG; } @Override public String message() { return "is a helicopter flight"; } },
 		MISSING_AIRPORTS            { @Override public Level logLevel() { return Level.INFO;  } @Override public String message() { return "missing departure and arrival airports"; } },
 		MISSING_AIRPORT_COORDINATES { @Override public Level logLevel() { return Level.INFO;  } @Override public String message() { return "missing departure and arrival airport coordinates"; } },
 		MISSING_DEP_ARR_TIMES       { @Override public Level logLevel() { return Level.INFO;  } @Override public String message() { return "missing departure and arrival times"; } },

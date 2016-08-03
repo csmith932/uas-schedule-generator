@@ -22,7 +22,6 @@ public class VfrSchedRecCreator
     private int idNumInc; 
     private AirportDataMap airportMap;
     private ASPMTaxiTimes taxiTimes;
-    protected VFRHelicopterMap helicopterMap;
     
     // Output
     protected ArrayList<ScheduleRecord> schedRecList;   
@@ -65,16 +64,6 @@ public class VfrSchedRecCreator
         return taxiTimes;
     }
     
-    public void setHelicopterMap(VFRHelicopterMap helicopterMap)
-    {
-        this.helicopterMap = helicopterMap;
-    }
-
-    public VFRHelicopterMap getHelicopterMap()
-    {
-        return helicopterMap;
-    }
-
     public void setLocalDate(Timestamp localDate)
     {
         this.localDate = localDate;
@@ -111,14 +100,7 @@ public class VfrSchedRecCreator
 
     private int getVfrCount(AirportData airport, VFROpsnetAirportData vfrAirport)
     {
-        int nVfrToAdd = vfrAirport.getNumVFR();
-        
-        if (0 < nVfrToAdd && this.helicopterMap != null)
-        {
-            nVfrToAdd = this.helicopterMap.getNumberVfrOperations(airport,nVfrToAdd);
-        }
-
-        return nVfrToAdd;
+        return vfrAirport.getNumVFR();
     }
 
     public List<ScheduleRecord> populateAirport(

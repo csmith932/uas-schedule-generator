@@ -43,9 +43,13 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
             tasks as the dataSource.
         </description>
     	<!-- yyyyMMdd for base calendar year -->
-        <property name="baseDates" value="20141001,20150101,20150401,20150701"/>
+<!-- TODO: Enable batch -->
+<!--         <property name="baseDates" value="20141001,20150101,20150401,20150701"/> -->
+    	<property name="baseDates" value="20141001"/>
     	<!-- yyyy for forecast fiscal year. Forecast calendar year and simulation start date are computed from this and baseDate -->
-        <property name="forecastFiscalYears" value="2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040"/>
+<!-- TODO: Enable batch -->
+<!--         <property name="forecastFiscalYears" value="2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040"/> -->
+        <property name="forecastFiscalYears" value="2016"/>
         <!-- Arbitrary query string. Groups of input files relevant to a particular scenario should have a classifier value-->
         <property name="classifiers" value="low,medium,high"/>
         <!-- Global random seed. Primarily used to initialize the random number generators for spawning Monte Carlo instances -->
@@ -118,7 +122,6 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
                 <entry key="internationalCountryRegionMapFile" value-ref="international_country_region_map"/>
                 <entry key="internationalOpsCountsFile" value-ref="international_ops_counts"/>
                 <entry key="aspmNominalTaxiTimesFile" value-ref="aspm_nominal_taxi_times"/>
-                <entry key="vfrHelicopterPercentFile" value-ref="vfr_helicopter_percent"/>
                 <entry key="mergedAirportDataFile" value-ref="merged_airport_data"/>
                 <entry key="inputScheduleFile" value-ref="scheduleFile" />
                 <entry key="opsnetFile" value-ref="opsnet"/>

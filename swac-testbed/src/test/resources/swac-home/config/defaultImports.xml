@@ -97,12 +97,6 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
 		<property name="resourceName" value="taf_aops.csv"/>
 		<property name="readOnly" value="true"/>
     </bean>
-    <bean id="vfr_helicopter_percent" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.vfr.VFRHelicopterMap"/>
-		<property name="location" value="DATA"/>
-		<property name="resourceName" value="vfr_helicopter_percent.csv"/>
-		<property name="readOnly" value="true"/>
-    </bean>
     <bean id="scheduleFile" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
         <property name="dataType" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
         <property name="location" value="DATA"/>

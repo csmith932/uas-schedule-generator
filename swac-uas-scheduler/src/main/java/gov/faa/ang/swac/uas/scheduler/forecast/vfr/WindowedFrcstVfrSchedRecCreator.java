@@ -7,7 +7,6 @@ import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCount
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportDataMerger;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastInternationalAirportData;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
-import gov.faa.ang.swac.uas.scheduler.vfr.VFRHelicopterMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,18 +133,7 @@ public class WindowedFrcstVfrSchedRecCreator
     
     private int getVfrCountToAdd(ForecastTripDistAirportData airport)  
     {
-		VFRHelicopterMap helicopterMap = this.vfrSchedRecCreator.getHelicopterMap();
-    	
-        int numVfrToAdd = airport.getWindowedVfrCountToAdd();
-        if (0 < numVfrToAdd && 
-            helicopterMap != null) 
-        {
-            numVfrToAdd = helicopterMap.getNumberVfrOperations(
-                airport, 
-                numVfrToAdd);
-        }
-        
-        return numVfrToAdd;
+        return airport.getWindowedVfrCountToAdd();
     }
     
 	public List<ScheduleRecord> getFlights() 

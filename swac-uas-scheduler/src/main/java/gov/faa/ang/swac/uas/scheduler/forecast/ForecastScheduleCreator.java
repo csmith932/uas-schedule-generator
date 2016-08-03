@@ -15,7 +15,6 @@ import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDis
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistributionDataLoader;
 import gov.faa.ang.swac.uas.scheduler.forecast.vfr.ForecastVfrSchedRecCreator;
 import gov.faa.ang.swac.uas.scheduler.mathematics.statistics.HQRandom;
-import gov.faa.ang.swac.uas.scheduler.vfr.VFRHelicopterMap;
 import gov.faa.ang.swac.uas.scheduler.vfr.VFRLocalTimeGenerator;
 
 import java.util.List;
@@ -69,7 +68,6 @@ public class ForecastScheduleCreator
     private AirportDataMap mergedAirportDataFile;
     private List<ForecastAirportCountsRecord> opsnetFile;
     private List<ForecastAirportCountsRecordTaf> tafAopsFile;
-    private VFRHelicopterMap vfrHelicopterPercentFile;
  
     // configuration:
     private double  cloneTimeShiftStDev;
@@ -149,16 +147,6 @@ public class ForecastScheduleCreator
     public void setTafAopsFile(List<ForecastAirportCountsRecordTaf> val)
     {
         this.tafAopsFile = val;
-    }
-
-    public VFRHelicopterMap getVfrHelicopterPercentFile()
-    {
-        return this.vfrHelicopterPercentFile;
-    }
-
-    public void setVfrHelicopterPercentFile(VFRHelicopterMap val)
-    {
-        this.vfrHelicopterPercentFile = val;
     }
 
     public List<ScheduleRecord> getOutputScheduleFile()
@@ -276,9 +264,6 @@ public class ForecastScheduleCreator
             forecastFiscalYear,
             baseFiscalYear);
         
-        final VFRHelicopterMap helicopterMap =
-            vfrHelicopterPercentFile;
-
         //-----------------------------------------------------------------------------------------
         // Build a list of objects which link the airports
         // to their respective arriving and departing flights
@@ -324,7 +309,6 @@ public class ForecastScheduleCreator
                 vfrLocalTimeGenerator);
         vfrLoader.setAirportMap(airportMap);
         vfrLoader.setTaxiTimes(taxiTimes);
-        vfrLoader.setHelicopterMap(helicopterMap);
         logger.trace("created vfr loader");  
 
         ScheduleRecordCloner schedRecCloner = 

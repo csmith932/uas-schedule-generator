@@ -40,13 +40,6 @@ public class ForecastVfrSchedRecCreator extends VfrSchedRecCreator
 
     private int getVfrCount(ForecastTripDistAirportData aprt)
     {
-        int numVfrToAdd = aprt.getVfrCountToAdd();
-
-        if (numVfrToAdd > 0 && helicopterMap != null)
-        {
-            numVfrToAdd = helicopterMap.getNumberVfrOperations(aprt, numVfrToAdd);
-        }
-
-        return numVfrToAdd;
+        return aprt.getVfrCountToAdd();
     }
 }
