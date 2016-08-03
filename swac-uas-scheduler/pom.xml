@@ -6,9 +6,9 @@
 		<artifactId>swac-parent</artifactId>
 		<version>2.7.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>swac-scheduler</artifactId>
+	<artifactId>swac-uas-scheduler</artifactId>
 	<packaging>jar</packaging>
-	<name>SWAC Forecast Schedule Generator</name>
+	<name>SWAC UAS Forecast Schedule Generator</name>
     <dependencies>
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>

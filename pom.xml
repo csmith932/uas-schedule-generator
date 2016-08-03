@@ -52,7 +52,7 @@
 		<module>swac-timestamp</module>
 		<module>swac-assembly</module>
 		<module>swac-controller</module>
-		<module>swac-scheduler</module>
+		<module>swac-uas-scheduler</module>
 		<module>swac-data</module>
 		<module>swac-common</module>
 		<module>swac-testbed</module>
@@ -228,6 +228,11 @@
 			<dependency>
 				<groupId>gov.faa.ang.swac</groupId>
 				<artifactId>swac-users-guide</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>gov.faa.ang.swac</groupId>
+				<artifactId>swac-uas-scheduler</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

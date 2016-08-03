@@ -51,31 +51,15 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
 			<artifactId>swac-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-scheduler</artifactId>
+			<artifactId>swac-uas-scheduler</artifactId>
 		</dependency>
-		<dependency>
-            <groupId>gov.faa.ang.swac</groupId>
-            <artifactId>swac-passengerflowmodel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.faa.ang.swac</groupId>
-            <artifactId>swac-finalflown</artifactId>
-        </dependency>
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>
 			<artifactId>swac-data</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-users-guide</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>
@@ -83,48 +67,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-postprocessor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-reroute</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-simengine</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-tfm</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
 			<artifactId>swac-timestamp</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-fleetevolution</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-equipevolution</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-trimming</artifactId>
-		</dependency>  
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-itinerarygenerator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-guixremote</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.3.164</version>
 		</dependency>
 	</dependencies>
 </project>
