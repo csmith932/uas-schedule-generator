@@ -16,37 +16,10 @@ import java.util.List;
  */
 public class ForecastFlightListMerger
 {
-    private static String removedAprtSourceType = "ORIGINAL_EXTRA_CP";
-    
     private ForecastFlightListMerger()
     {
     }
 
-    /**
-     * Merged all of the different lists of flights into the final flight
-     * list for the Forecast process.
-     * @param aprts list of airports in the closed system
-     * @param cloner has the list of clone flights to add and the list of
-     * flights needing to be removed because of the trip distribution model
-     * @param removedAprts list of airports not in the closed system
-     * @param vfrFlights list of VFR flights created to match forecast totals
-     * @return a new list of {@link DemandFlight}
-     */
-    public static List<ScheduleRecord> merge(
-        List<ForecastTripDistAirportData> airportList,
-        ForecastCloner cloner,        
-        List<ForecastTripDistAirportData> removedAirportList,        
-        List<ScheduleRecord> vfrSchedRecList)
-    {
-        List<ScheduleRecord> results = new ArrayList<ScheduleRecord>();
-        
-        results.addAll(getFlightsByAirport(airportList,cloner));
-        results.addAll(getFlightsFromRemovedAirports(removedAirportList));
-        results.addAll(vfrSchedRecList);
-        
-        return results;
-    }
-    
     public static List<ScheduleRecord> merge(
         List<ForecastTripDistAirportData> airportList,
         ForecastCloner cloner)
@@ -83,39 +56,4 @@ public class ForecastFlightListMerger
         return results;
     }
     
-    private static List<ScheduleRecord> getFlightsFromRemovedAirports(
-        List<ForecastTripDistAirportData> airportList)
-    {
-        ArrayList<ScheduleRecord> results = new ArrayList<ScheduleRecord>();
-        
-        for(ForecastTripDistAirportData airport : airportList)
-        {
-            for(ForecastAirportDataPair cp : airport.getComingFrom())
-            {
-                results.addAll(cp.getFlights());
-            }
-            
-            for(ForecastAirportDataPair cp : airport.getGoingTo())
-            {
-                results.addAll(cp.getFlights());
-            }
-        }
-        
-        for(ScheduleRecord schedRec : results)
-        {
-            schedRec.flightPlanType = removedAprtSourceType;
-        }
-        
-        return results;
-    }
-
-    /*public static void setRemovedAprtSourceType(String str)
-    {
-        removedAprtSourceType = str;
-    }
-
-    public static String getRemovedAprtSourceType()
-    {
-        return removedAprtSourceType;
-    }*/
 }

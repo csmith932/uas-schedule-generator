@@ -7,7 +7,6 @@ import gov.faa.ang.swac.uas.scheduler.airport_data.AirportData;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataPair;
 import gov.faa.ang.swac.uas.scheduler.flight_data.*;
-import gov.faa.ang.swac.uas.scheduler.userclass.ATOPUserClassFinder;
 
 import java.util.ArrayList;
 import java.util.List;
