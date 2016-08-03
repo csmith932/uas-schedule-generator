@@ -7,7 +7,6 @@ package gov.faa.ang.swac.uas.scheduler.forecast;
 import gov.faa.ang.swac.common.datatypes.Timestamp;
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
-import gov.faa.ang.swac.uas.scheduler.data.ASPMTaxiTimes;
 import gov.faa.ang.swac.uas.scheduler.flight_data.ScheduleRecordCloner;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.*;
 import gov.faa.ang.swac.uas.scheduler.forecast.clone.ForecastCloner;
@@ -62,16 +61,12 @@ public class ForecastScheduleCreator
 
 	// inputData:
     private List<ScheduleRecord> inputScheduleFile;
-    private List<ASPMTaxiTimes.ASPMTaxiTimesRecord> aspmNominalTaxiTimesFile;
     private AirportDataMap mergedAirportDataFile;
     private List<ForecastAirportCountsRecord> opsnetFile;
     private List<ForecastAirportCountsRecordTaf> tafAopsFile;
  
     // configuration:
     private double  cloneTimeShiftStDev;
-    private double  integerizationTolerance; 
-    private int     fratarMaxSteps;
-    private double  fratarConvergenceCriteria;
     private int     numHoursFromGMT;
     private int     numDaysToForecast;
     
@@ -86,16 +81,6 @@ public class ForecastScheduleCreator
     public void setInputScheduleFile(List<ScheduleRecord> val)
     {
         this.inputScheduleFile = val;
-    }
-    
-    public List<ASPMTaxiTimes.ASPMTaxiTimesRecord> getAspmNominalTaxiTimesFile()
-    {
-        return this.aspmNominalTaxiTimesFile;
-    }
-
-    public void setAspmNominalTaxiTimesFile(List<ASPMTaxiTimes.ASPMTaxiTimesRecord> val)
-    {
-        this.aspmNominalTaxiTimesFile = val;
     }
     
     public AirportDataMap getMergedAirportDataFile()
@@ -146,36 +131,6 @@ public class ForecastScheduleCreator
         this.cloneTimeShiftStDev = val;
     }
 
-    public double getIntegerizationTolerance()
-    {
-        return this.integerizationTolerance;
-    }
-
-    public void setIntegerizationTolerance(double val)
-    {
-        this.integerizationTolerance = val;
-    }
-
-    public int getFratarMaxSteps()
-    {
-        return this.fratarMaxSteps;
-    }
-
-    public void setFratarMaxSteps(int val)
-    {
-        this.fratarMaxSteps = val;
-    }
-
-    public double getFratarConvergenceCriteria()
-    {
-        return this.fratarConvergenceCriteria;
-    }
-
-    public void setFratarConvergenceCriteria(double val)
-    {
-        this.fratarConvergenceCriteria = val;
-    }
-
     public int getNumHoursFromGMT()
     {
         return this.numHoursFromGMT;
@@ -215,10 +170,6 @@ public class ForecastScheduleCreator
         
         final AirportDataMap airportMap =
             mergedAirportDataFile;
-        
-        final ASPMTaxiTimes taxiTimes = new ASPMTaxiTimes(
-            this.aspmNominalTaxiTimesFile,
-            yyyymm);
         
         final ForecastAirportCountsMap opsnetData = new ForecastAirportCountsMap(
             this.opsnetFile,
@@ -273,7 +224,6 @@ public class ForecastScheduleCreator
                 -1,
                 vfrLocalTimeGenerator);
         vfrLoader.setAirportMap(airportMap);
-        vfrLoader.setTaxiTimes(taxiTimes);
         logger.trace("created vfr loader");  
 
         ScheduleRecordCloner schedRecCloner = 
@@ -287,10 +237,7 @@ public class ForecastScheduleCreator
             cloneTimeShiftStDev);
 
         ForecastUnitProcessor unitProcessor = 
-            new ForecastUnitProcessor(
-                integerizationTolerance,
-                fratarMaxSteps,
-                fratarConvergenceCriteria);
+            new ForecastUnitProcessor();
         
         ForecastProcessor processor = new ForecastProcessor(
             airportDataList,

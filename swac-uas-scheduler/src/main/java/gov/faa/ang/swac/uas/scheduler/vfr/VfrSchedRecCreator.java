@@ -6,7 +6,6 @@ import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportData;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataPair;
-import gov.faa.ang.swac.uas.scheduler.data.ASPMTaxiTimes;
 import gov.faa.ang.swac.uas.scheduler.flight_data.*;
 import gov.faa.ang.swac.uas.scheduler.userclass.ATOPUserClassFinder;
 
@@ -21,7 +20,6 @@ public class VfrSchedRecCreator
     private int nextIdNum;
     private int idNumInc; 
     private AirportDataMap airportMap;
-    private ASPMTaxiTimes taxiTimes;
     
     // Output
     protected ArrayList<ScheduleRecord> schedRecList;   
@@ -54,16 +52,6 @@ public class VfrSchedRecCreator
         return airportMap;
     }
 
-    public void setTaxiTimes(ASPMTaxiTimes taxiTimes)
-    {
-        this.taxiTimes = taxiTimes;
-    }
-
-    public ASPMTaxiTimes getTaxiTimes()
-    {
-        return taxiTimes;
-    }
-    
     public void setLocalDate(Timestamp localDate)
     {
         this.localDate = localDate;
@@ -143,10 +131,7 @@ public class VfrSchedRecCreator
             localTime.hourAdd(-airport.getUtcDifference());        
         if (departure)
         {
-            double taxiTimeSecs = 60
-                *taxiTimes.getTaxiOutTime(
-                    airport.getFaaCode(),
-                    schedRec.aircraftId);
+            double taxiTimeSecs = 60*10; // TODO: CSS made up 10 min so I could get rid of taxi time file
             
             schedRec.gateOutTime = etmsTime.secondAdd(-taxiTimeSecs);
             schedRec.gateOutTimeFlag = "CREATED";
@@ -155,10 +140,7 @@ public class VfrSchedRecCreator
         }
         else
         {
-            double taxiTimeSecs = 60
-                *taxiTimes.getTaxiInTime(
-                    airport.getFaaCode(),
-                    schedRec.aircraftId);
+            double taxiTimeSecs = 60*10; // TODO: CSS made up 10 min so I could get rid of taxi time file
             
             schedRec.runwayOnTime = etmsTime;
             schedRec.runwayOnTimeFlag = "CREATED";

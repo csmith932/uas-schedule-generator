@@ -14,25 +14,8 @@ import java.util.List;
 
 public class ForecastUnitProcessor
 {   
-    // Input
-    private double  integerizationTolerance;
-    private int     fratarMaxSteps;
-    private double  fratarConvergenceCriteria;   
-    
     // Output
-	private int     nClonedFlights;    
-
-    public ForecastUnitProcessor(
-        double integerizationTolerance,
-        int fratarMaxSteps,
-        double fratarConvergenceCriteria)
-    {
-        this.integerizationTolerance    = integerizationTolerance;
-        this.fratarMaxSteps             = fratarMaxSteps;
-        this.fratarConvergenceCriteria  = fratarConvergenceCriteria;
-        
-        this.nClonedFlights             = 0;     
-    }
+	private int     nClonedFlights = 0;    
 
     public List<ScheduleRecord> process(
         List<ForecastTripDistAirportData> retainedAirportList,

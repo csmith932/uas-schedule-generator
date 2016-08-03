@@ -86,10 +86,4 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
 		<property name="readOnly" value="true"/>
     </bean>
 	 -->
-
-    <bean id="forecastSchedule" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-        <property name="location" value="REPORT"/>
-        <property name="dataType" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
-        <property name="resourceName" value="_forecastSchedule_.txt"/>
-    </bean>
 </beans>

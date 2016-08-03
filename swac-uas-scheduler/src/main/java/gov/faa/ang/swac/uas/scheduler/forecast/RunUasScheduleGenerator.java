@@ -17,7 +17,6 @@ import gov.faa.ang.swac.controller.core.CloneableAbstractTask;
 import gov.faa.ang.swac.datalayer.DataAccessException;
 import gov.faa.ang.swac.datalayer.storage.DataMarshaller;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
-import gov.faa.ang.swac.uas.scheduler.data.ASPMTaxiTimes.ASPMTaxiTimesRecord;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf;
 
@@ -68,7 +67,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     }
     // inputData:
     private DataMarshaller inputScheduleFile;
-    private DataMarshaller aspmNominalTaxiTimesFile;
     private DataMarshaller mergedAirportDataFile;
     private DataMarshaller opsnetFile;
     private DataMarshaller tafAopsFile;
@@ -124,14 +122,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
     public void setInputScheduleFile(DataMarshaller scheduleFile) {
         this.inputScheduleFile = scheduleFile;
-    }
-
-    public DataMarshaller getAspmNominalTaxiTimesFile() {
-        return this.aspmNominalTaxiTimesFile;
-    }
-
-    public void setAspmNominalTaxiTimesFile(DataMarshaller aspmNominalTaxiTimesFile) {
-        this.aspmNominalTaxiTimesFile = aspmNominalTaxiTimesFile;
     }
 
     public DataMarshaller getMergedAirportDataFile() {
@@ -229,9 +219,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
             this.scheduleGenerator = new ForecastScheduleCreator();
             this.scheduleGenerator.setCloneTimeShiftStDev(this.cloneTimeShiftStDev);
-            this.scheduleGenerator.setIntegerizationTolerance(this.integerizationTolerance);
-            this.scheduleGenerator.setFratarMaxSteps(this.fratarMaxSteps);
-            this.scheduleGenerator.setFratarConvergenceCriteria(this.fratarConvergenceCriteria);
             this.scheduleGenerator.setNumHoursFromGMT(this.numHoursFromGMT);
             this.scheduleGenerator.setNumDaysToForecast(this.numDaysToForecast);
             this.scheduleGenerator.setForecastClonerRandom((long) forecastClonerRandomSeed);
@@ -241,7 +228,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             //---------------------------------------------------------------------------------------------------------
             // LOAD/READ
             // 1. flight plans
-            // 2. ASPM taxi times
             // 5. merged airport data
             // 6. forecasted OPSNET data
             // 7. forecasted TAF data
@@ -254,14 +240,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             this.inputScheduleFile.load(baseSchedRecList);
 
             this.scheduleGenerator.setInputScheduleFile(baseSchedRecList);
-
-            // 2. Load ASPM taxi times --------------------------------------------------------------------------------
-
-            List<ASPMTaxiTimesRecord> aspmTaxiTimesRecordList = new ArrayList<ASPMTaxiTimesRecord>();
-            logger.debug("loading ASPM taxi times...");
-            this.aspmNominalTaxiTimesFile.load(aspmTaxiTimesRecordList);
-
-            this.scheduleGenerator.setAspmNominalTaxiTimesFile(aspmTaxiTimesRecordList);
 
             // 5. Load merged airport data ----------------------------------------------------------------------------
             // Uses a list, but there is only one AirportDataMap object.
@@ -306,14 +284,11 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
             logger.debug("saving forecast schedule records...");
             this.forecastSchedule.save(forecastSchedRecList);
-            logger.debug("saving airport data file records...");
-            this.outputMergedAirportDataFile.save(airportDataMapList);
 
             //---------------------------------------------------------------------------------------------------------
             // MEMORY CLEANUP
             //---------------------------------------------------------------------------------------------------------
             this.scheduleGenerator.setInputScheduleFile(null);
-            this.scheduleGenerator.setAspmNominalTaxiTimesFile(null);
             this.scheduleGenerator.setMergedAirportDataFile(null);
             this.scheduleGenerator.setOpsnetFile(null);
             this.scheduleGenerator.setTafAopsFile(null);
@@ -334,7 +309,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     public boolean validate(VALIDATION_LEVEL level) {
         boolean retval = false;
 
-        retval = validateFiles(new DataMarshaller[]{inputScheduleFile, aspmNominalTaxiTimesFile,
+        retval = validateFiles(new DataMarshaller[]{inputScheduleFile,
                     mergedAirportDataFile, opsnetFile, tafAopsFile}, level);
         return retval;
     }
