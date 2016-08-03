@@ -62,7 +62,6 @@ public class ForecastScheduleCreator
 	// inputData:
     private List<ScheduleRecord> inputScheduleFile;
     private AirportDataMap mergedAirportDataFile;
-    private List<ForecastAirportCountsRecord> opsnetFile;
     private List<ForecastAirportCountsRecordTaf> tafAopsFile;
  
     // configuration:
@@ -91,16 +90,6 @@ public class ForecastScheduleCreator
     public void setMergedAirportDataFile(AirportDataMap val)
     {
         this.mergedAirportDataFile = val;
-    }
-
-    public List<ForecastAirportCountsRecord> getOpsnetFile()
-    {
-        return this.opsnetFile;
-    }
-
-    public void setOpsnetFile(List<ForecastAirportCountsRecord> val)
-    {
-        this.opsnetFile = val;
     }
 
     public List<ForecastAirportCountsRecordTaf> getTafAopsFile()
@@ -158,8 +147,6 @@ public class ForecastScheduleCreator
         // Adjust and format input dates ----------------------------------------------------------
                 
         final int baseFiscalYear    = startDate.getFiscalYear();
-        final String yyyymmdd       = Timestamp.toBonnDateOnlyString(startDate);
-        final String yyyymm         = yyyymmdd.substring(0,6);
         
         Timestamp date = new Timestamp(startDate.getTime()).truncateToDay();
         Timestamp startTime         = date.hourAdd(this.numHoursFromGMT);// 0900 ZULU
@@ -170,10 +157,6 @@ public class ForecastScheduleCreator
         
         final AirportDataMap airportMap =
             mergedAirportDataFile;
-        
-        final ForecastAirportCountsMap opsnetData = new ForecastAirportCountsMap(
-            this.opsnetFile,
-            yyyymmdd);
         
         final ForecastTafData allTafData = new ForecastTafData(
             this.tafAopsFile,
@@ -242,7 +225,6 @@ public class ForecastScheduleCreator
         ForecastProcessor processor = new ForecastProcessor(
             airportDataList,
             allTafData,
-            opsnetData,
             forecastCloner,    
             vfrLoader,
             unitProcessor);

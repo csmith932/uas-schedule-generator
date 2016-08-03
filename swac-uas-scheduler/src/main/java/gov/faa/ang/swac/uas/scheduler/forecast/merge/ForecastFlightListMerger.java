@@ -29,7 +29,7 @@ public class ForecastFlightListMerger
      * @param cloner has the list of clone flights to add and the list of
      * flights needing to be removed because of the trip distribution model
      * @param removedAprts list of airports not in the closed system
-     * @param vfrFlights list of VFR flights created to match OPSNET totals
+     * @param vfrFlights list of VFR flights created to match forecast totals
      * @return a new list of {@link DemandFlight}
      */
     public static List<ScheduleRecord> merge(

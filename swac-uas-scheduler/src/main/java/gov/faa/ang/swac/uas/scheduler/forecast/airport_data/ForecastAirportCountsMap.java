@@ -9,7 +9,7 @@ import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDis
 /**
  * A Class that creates a map between an airport code and a
  * {@link ForecastTripDistAirportDataCount} object.  For example,
- * this could be used to read in all of the baseline day OPSNET counts.
+ * this could be used to read in all of the baseline day counts.
  * These counts can then be merged into the list of airports that we are
  * concerned with.
  * 
@@ -95,21 +95,6 @@ public class ForecastAirportCountsMap
     public ForecastTripDistAirportDataCount getCounts(
         ForecastTripDistAirportData aprt)
     {
-        return getCounts(aprt, false);
-    }
-
-    /**
-     * Given an {@link ForecastTripDistAirportData} airport, find 
-     * the associated counts.
-     * @param aprt
-     * @param useDefault If true, and the airport has no mapping associated,
-     * use the default count value
-     * @return {@link ForecastTripDistAirportDataCount} count data for the
-     * given airport
-     */
-    public ForecastTripDistAirportDataCount getCounts(
-        ForecastTripDistAirportData aprt, boolean useDefault)
-    {
         ForecastTripDistAirportDataCount counts = null;
     
         counts = data.get(aprt.getIcaoFaaCode());
@@ -119,7 +104,7 @@ public class ForecastAirportCountsMap
             counts = data.get(aprt.getFaaIcaoCode());
         }
         
-        if(counts == null && useDefault)
+        if(counts == null)
         {
             counts = defaultData;
         }

@@ -121,7 +121,6 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
                 <entry key="tafAopsFile" value-ref="taf_aops"/>
                 <entry key="mergedAirportDataFile" value-ref="merged_airport_data"/>
                 <entry key="inputScheduleFile" value-ref="scheduleFile" />
-                <entry key="opsnetFile" value-ref="opsnet"/>
             </map>
         </property>
         <property name="innerLoopVariables">

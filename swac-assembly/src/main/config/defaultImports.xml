@@ -67,12 +67,6 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
 		<property name="resourceName" value="merged_airport_data.txt"/>
 		<property name="readOnly" value="true"/>
     </bean>
-    <bean id="opsnet" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord"/>
-		<property name="location" value="DATA"/>
-		<property name="resourceName" value="opsnet.csv"/>
-		<property name="readOnly" value="true"/>
-    </bean>
     <bean id="taf_aops" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
 		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf"/>
 		<property name="location" value="DATA"/>

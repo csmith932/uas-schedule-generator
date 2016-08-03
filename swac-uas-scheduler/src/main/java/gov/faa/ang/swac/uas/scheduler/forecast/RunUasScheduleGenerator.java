@@ -17,7 +17,6 @@ import gov.faa.ang.swac.controller.core.CloneableAbstractTask;
 import gov.faa.ang.swac.datalayer.DataAccessException;
 import gov.faa.ang.swac.datalayer.storage.DataMarshaller;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf;
 
 public final class RunUasScheduleGenerator extends CloneableAbstractTask {
@@ -68,7 +67,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     // inputData:
     private DataMarshaller inputScheduleFile;
     private DataMarshaller mergedAirportDataFile;
-    private DataMarshaller opsnetFile;
     private DataMarshaller tafAopsFile;
     // configuration:
     private double cloneTimeShiftStDev;
@@ -130,14 +128,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
     public void setMergedAirportDataFile(DataMarshaller mergedAirportDataFile) {
         this.mergedAirportDataFile = mergedAirportDataFile;
-    }
-
-    public DataMarshaller getOpsnetFile() {
-        return this.opsnetFile;
-    }
-
-    public void setOpsnetFile(DataMarshaller opsnetFile) {
-        this.opsnetFile = opsnetFile;
     }
 
     public DataMarshaller getTafAopsFile() {
@@ -229,7 +219,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             // LOAD/READ
             // 1. flight plans
             // 5. merged airport data
-            // 6. forecasted OPSNET data
             // 7. forecasted TAF data
             //---------------------------------------------------------------------------------------------------------
 
@@ -249,14 +238,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             this.mergedAirportDataFile.load(airportDataMapList);
 
             this.scheduleGenerator.setMergedAirportDataFile(airportDataMapList.get(0));
-
-            // 6. Load forecasted OPSNET data -------------------------------------------------------------------------
-
-            List<ForecastAirportCountsRecord> forecastAirportCountsRecList = new ArrayList<ForecastAirportCountsRecord>();
-            logger.debug("loading airport forecast counts...");
-            this.opsnetFile.load(forecastAirportCountsRecList);
-
-            this.scheduleGenerator.setOpsnetFile(forecastAirportCountsRecList);
 
             // 7. Load forecasted TAF data ----------------------------------------------------------------------------
 
@@ -290,7 +271,6 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             //---------------------------------------------------------------------------------------------------------
             this.scheduleGenerator.setInputScheduleFile(null);
             this.scheduleGenerator.setMergedAirportDataFile(null);
-            this.scheduleGenerator.setOpsnetFile(null);
             this.scheduleGenerator.setTafAopsFile(null);
 
             this.scheduleGenerator.setOutputScheduleFile(null);
@@ -310,7 +290,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
         boolean retval = false;
 
         retval = validateFiles(new DataMarshaller[]{inputScheduleFile,
-                    mergedAirportDataFile, opsnetFile, tafAopsFile}, level);
+                    mergedAirportDataFile, tafAopsFile}, level);
         return retval;
     }
 }

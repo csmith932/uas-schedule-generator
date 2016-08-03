@@ -10,7 +10,6 @@ public class ForecastAirportDataMerger
 {
     public final static int DATA_TAF_BASE = 1;
     public final static int DATA_TAF_FORECAST = 2;
-    public final static int DATA_OPSNET = 3;
     
     private ForecastAirportDataMerger()
     {
@@ -43,16 +42,10 @@ public class ForecastAirportDataMerger
         int dataType, 
         UserClassDataSplitter.UserClass userClass)
     {
-        boolean fallThroughToDefault = true;
-        if (dataType == DATA_OPSNET)
-        {
-            fallThroughToDefault = false;
-        }
-        
         for(ForecastTripDistAirportData airport : airportList)
         {
             ForecastTripDistAirportDataCount counts = 
-                    countData.getCounts(airport,fallThroughToDefault);                
+                    countData.getCounts(airport);                
 
             if (userClass != null)
             {
@@ -92,9 +85,6 @@ public class ForecastAirportDataMerger
                 break;
             case DATA_TAF_FORECAST:
                 airport.setTafForecast(counts);
-                break;
-            case DATA_OPSNET:
-                airport.setOpsnetBase(counts);
                 break;
             default:
                 break;

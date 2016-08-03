@@ -16,7 +16,6 @@ public class ForecastProcessor
     private List<ForecastTripDistAirportData> airportDataList;
 
     private ForecastTafData tafData;
-    private ForecastAirportCountsMap opsnetData;   
     private ForecastVfrSchedRecCreator vfrCreator;
     private ForecastCloner cloner;
     private ForecastUnitProcessor unitProcessor;   
@@ -61,7 +60,6 @@ public class ForecastProcessor
     public ForecastProcessor(
         List<ForecastTripDistAirportData> airportDataList,
         ForecastTafData tafData,
-        ForecastAirportCountsMap opsnetData,
         ForecastCloner cloner,       
         ForecastVfrSchedRecCreator vfrCreator,
         ForecastUnitProcessor unitProcessor)
@@ -69,7 +67,6 @@ public class ForecastProcessor
         this.airportDataList    = airportDataList;
         
         this.tafData            = tafData;
-        this.opsnetData         = opsnetData;
         
         this.cloner             = cloner;       
         this.vfrCreator         = vfrCreator;        
@@ -90,35 +87,11 @@ public class ForecastProcessor
     	UserClassDataSplitter splitter = new UserClassDataSplitter();
     	splitter.split(airportDataList);
         
-        /*
-        // Construct enumerated map to the INCLUDED airports
-        Map<UserClassDataSplitter.UserClass,List<ForecastTripDistAirportData>> airportListMap = 
-            new EnumMap<UserClassDataSplitter.UserClass,List<ForecastTripDistAirportData>>(
-                UserClassDataSplitter.UserClass.class);
-        
-        // Construct enumerated map to the REMOVED airports
-        Map<UserClassDataSplitter.UserClass,List<ForecastTripDistAirportData>> removedAirportListMap = 
-            new EnumMap<UserClassDataSplitter.UserClass,List<ForecastTripDistAirportData>>(
-                UserClassDataSplitter.UserClass.class);
-        */
-        
         // Process each user class: GA, MIL, OTHER --------------------------------------------------------------------
         for (UserClassDataSplitter.UserClass userClass : UserClassDataSplitter.UserClass.values())
         {
             // Get a copy of the airport list from the splitter 
             // corresponding to this user class
-            /*
-            List<ForecastTripDistAirportData> airportList = 
-                airportListMap.put(
-                    userClass,
-                    splitter.getAirportList(userClass));
-            
-            // Remove sinks & sources from the airport network
-            List<ForecastTripDistAirportData> removedAirportList = 
-                removedAirportListMap.put(
-                    userClass,
-                    ForecastTripDistAirportRemover.removeSinksAndSources(airportList));
-            */
             
             List<ForecastTripDistAirportData> airportList = 
                 splitter.getAirportList(userClass);
@@ -185,13 +158,6 @@ public class ForecastProcessor
     {
     	ForecastAirportDataMerger.setInitialEtmsCountData(airportList);
         
-        // Robert Lakatos did not include OPSNET data for user class breakdown
-        /*ForecastAirportDataMerger.mergeCountDataIntoAirports(
-            airportList,
-            opsnetData,
-            ForecastAirportDataMerger.DATA_OPSNET, 
-            userClass);*/
-
     	ForecastAirportDataMerger.mergeCountDataIntoAirports(
             airportList, 
             tafData.getYearData(baseFiscalYear), 
@@ -203,14 +169,6 @@ public class ForecastProcessor
         List<ForecastTripDistAirportData> airportList,
         int baseFiscalYear)
     {
-        // BUG? Robert Lakatos did not include this line:
-        //ForecastAirportDataMerger.setInitialEtmsCountData(airportList);
-        
-        ForecastAirportDataMerger.mergeCountDataIntoAirports(
-            airportList,
-            opsnetData,
-            ForecastAirportDataMerger.DATA_OPSNET);
-        
     	ForecastAirportDataMerger.mergeCountDataIntoAirports(
             airportList, 
             tafData.getYearData(baseFiscalYear), 

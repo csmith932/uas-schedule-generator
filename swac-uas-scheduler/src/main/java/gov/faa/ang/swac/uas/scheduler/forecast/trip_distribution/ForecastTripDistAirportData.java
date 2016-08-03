@@ -14,8 +14,7 @@ public class ForecastTripDistAirportData extends AirportData
         etmsDep, 
         etmsArr, 
         tafBase, 
-        tafForecast, // part of projections
-        opsnetBase;
+        tafForecast;
     private double 
         initTotalDeps,
         initTotalArrs,
@@ -54,7 +53,6 @@ public class ForecastTripDistAirportData extends AirportData
         etmsDep         = new ForecastTripDistAirportDataCount();
         etmsArr         = new ForecastTripDistAirportDataCount();
         tafBase         = new ForecastTripDistAirportDataCount();
-        opsnetBase      = new ForecastTripDistAirportDataCount();
         
         initTotalDeps   = 0;
         initTotalArrs   = 0;
@@ -112,11 +110,6 @@ public class ForecastTripDistAirportData extends AirportData
     public ForecastTripDistAirportDataCount getTafForecast()
     {
         return tafForecast;
-    }
-
-    public void setOpsnetBase(ForecastTripDistAirportDataCount opsnetBase)
-    {
-        this.opsnetBase = opsnetBase;
     }
 
     public void setInitialTotalDep(double initTotalDeps)
@@ -271,16 +264,8 @@ public class ForecastTripDistAirportData extends AirportData
 
     public double getProjectedOpsnet()
     {
-        double projectedOpsnet = opsnetBase.getTotal();
-        
-        if (0 < projectedOpsnet && 0 < tafBase.getTotal())
-        {
-            projectedOpsnet *= 
-                tafForecast.getTotal()
-                /tafBase.getTotal();
-        }
-        
-        return projectedOpsnet;
+    	// This used to multiply the OPSNET actuals by the ratio of the forecast to base TAF. Instead we're treating the forecast as golden 
+       return tafForecast.getTotal();
     }
 
     public void addToWindowedArrivals(int count) 

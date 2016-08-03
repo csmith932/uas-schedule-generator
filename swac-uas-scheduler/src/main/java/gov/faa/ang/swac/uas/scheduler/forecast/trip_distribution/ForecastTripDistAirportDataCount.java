@@ -2,7 +2,7 @@ package gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution;
 
 /**
  * A Class representing count values for different user class categories
- * necessary for matching up the ETMS to TAF and OPSNET data categories
+ * necessary for matching up the TFMS to TAF data categories
  * in the forecasting process.  Different user classes are grown at
  * different rates, therefore the different category totals need to be tracked.
  * 

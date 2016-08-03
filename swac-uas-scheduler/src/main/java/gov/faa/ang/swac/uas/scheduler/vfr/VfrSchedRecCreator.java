@@ -67,30 +67,6 @@ public class VfrSchedRecCreator
         this.schedRecList = new ArrayList<ScheduleRecord>();
     }   
     
-    public void populate(List<VFROpsnetAirportData> airports)
-    {
-        for (VFROpsnetAirportData vfrAirport : airports)
-        {
-            AirportData airport = 
-                this.airportMap.getAirport(vfrAirport.getFaaCode());
-            
-            int nVfrToAdd = getVfrCount(airport, vfrAirport); 
-            if (0 < nVfrToAdd)
-            {
-                if (airport != null)
-                {
-                    this.schedRecList.addAll(
-                        populateAirport(airport,nVfrToAdd));
-                }
-            }
-        }
-    }
-
-    private int getVfrCount(AirportData airport, VFROpsnetAirportData vfrAirport)
-    {
-        return vfrAirport.getNumVFR();
-    }
-
     public List<ScheduleRecord> populateAirport(
         AirportData airport,
         int nVfrToAdd)
