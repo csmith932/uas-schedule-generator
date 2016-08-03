@@ -134,8 +134,8 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
         <property name="outputData">
             <map>
                 <entry key="forecastSchedule" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
-                <entry key="outputCountryRegionRecordList" value="gov.faa.ang.swac.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord"/>
-                <entry key="outputMergedAirportDataFile" value="gov.faa.ang.swac.scheduler.airport_data.AirportDataMap"/>
+                <entry key="outputCountryRegionRecordList" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord"/>
+                <entry key="outputMergedAirportDataFile" value="gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap"/>
             </map>
         </property>
         <property name="dataAccessObjects">
@@ -143,7 +143,7 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
             </map>
         </property>
         <property name="prototype">
-            <bean class="gov.faa.ang.swac.scheduler.forecast.RunScheduleGenerator">
+            <bean class="gov.faa.ang.swac.uas.scheduler.forecast.RunUasScheduleGenerator">
                 <property name="cloneTimeShiftStDev" value="5.0"/>
                 <property name="integerizationTolerance" value="0.5"/>
                 <property name="fratarMaxSteps" value="20"/>

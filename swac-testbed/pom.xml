@@ -78,7 +78,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>
-			<artifactId>swac-scheduler</artifactId>
+			<artifactId>swac-uas-scheduler</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -62,43 +62,43 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
     
     -->
    	<bean id="aspm_nominal_taxi_times" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.scheduler.data.ASPMTaxiTimes.ASPMTaxiTimesRecord"/>
+		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.data.ASPMTaxiTimes.ASPMTaxiTimesRecord"/>
 		<property name="location" value="DATA"/>
 		<property name="resourceName" value="aspm_nominal_taxi_times.csv"/>
 		<property name="readOnly" value="true"/>
     </bean>
     <bean id="international_country_region_map" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord"/>
+		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.CountryRegionHash.CountryRegionRecord"/>
 		<property name="location" value="DATA"/>
 		<property name="resourceName" value="international_country_region_map.txt"/>
 		<property name="readOnly" value="true"/>
     </bean>
     <bean id="international_ops_counts" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.ForecastInternationalAirportData"/>
+		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastInternationalAirportData"/>
 		<property name="location" value="DATA"/>
 		<property name="resourceName" value="international_ops_counts.csv"/>
 		<property name="readOnly" value="true"/>
     </bean>
     <bean id="merged_airport_data" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.scheduler.airport_data.AirportDataMap"/>
+		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap"/>
 		<property name="location" value="DATA"/>
 		<property name="resourceName" value="merged_airport_data.txt"/>
 		<property name="readOnly" value="true"/>
     </bean>
     <bean id="opsnet" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.ForecastAirportCountsRecord"/>
+		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord"/>
 		<property name="location" value="DATA"/>
 		<property name="resourceName" value="opsnet.csv"/>
 		<property name="readOnly" value="true"/>
     </bean>
     <bean id="taf_aops" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf"/>
+		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecordTaf"/>
 		<property name="location" value="DATA"/>
 		<property name="resourceName" value="taf_aops.csv"/>
 		<property name="readOnly" value="true"/>
     </bean>
     <bean id="vfr_helicopter_percent" class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
-		<property name="dataType" value="gov.faa.ang.swac.scheduler.vfr.VFRHelicopterMap"/>
+		<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.vfr.VFRHelicopterMap"/>
 		<property name="location" value="DATA"/>
 		<property name="resourceName" value="vfr_helicopter_percent.csv"/>
 		<property name="readOnly" value="true"/>
