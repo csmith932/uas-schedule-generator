@@ -19,7 +19,7 @@ import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDis
 public class ForecastAirportCountsMap
 {
     private final HashMap<String, ForecastTripDistAirportDataCount> data = new HashMap<String, ForecastTripDistAirportDataCount>();
-    private final ForecastTripDistAirportDataCount defaultData = new ForecastTripDistAirportDataCount();
+    private final ForecastTripDistAirportDataCount defaultData = new ForecastTripDistAirportDataCount(0,0,0);
     
     public ForecastAirportCountsMap() {}
     
@@ -110,14 +110,6 @@ public class ForecastAirportCountsMap
         }
         
         return counts;
-    }
-
-    /**
-     * @return the default count data for this map
-     */
-    public ForecastTripDistAirportDataCount getDefaultData()
-    {
-        return defaultData;
     }
 
     /**

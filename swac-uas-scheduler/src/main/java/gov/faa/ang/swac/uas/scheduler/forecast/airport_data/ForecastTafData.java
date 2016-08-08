@@ -25,7 +25,7 @@ public class ForecastTafData
     		int year = rec.getYear();
     		if (year == baseFiscalYear || year == forecastFiscalYear)
 			{
-				this.addYearData(year, rec.airportName, rec.count, ForecastTafData.ADD_TO_DEFAULT);
+				this.addYearData(year, rec.airportName, rec.count);
 			}
     	}
     }
@@ -53,8 +53,7 @@ public class ForecastTafData
     private void addYearData(
         Integer year, 
         String aprtCode, 
-        ForecastTripDistAirportDataCount aprtCount, 
-        boolean addToDefault)
+        ForecastTripDistAirportDataCount aprtCount)
     {
         ForecastAirportCountsMap map = null;
         if(tafByYear.containsKey(year))
@@ -68,12 +67,5 @@ public class ForecastTafData
         }
         
         map.addData(aprtCode, aprtCount);
-        
-        if(addToDefault)
-        {
-            ForecastTripDistAirportDataCount defaultData = 
-                map.getDefaultData();
-            defaultData.addAllData(aprtCount);
-        }
     }
 }
