@@ -67,7 +67,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     // inputData:
     private DataMarshaller inputScheduleFile;
     private DataMarshaller mergedAirportDataFile;
-    private DataMarshaller tafAopsFile;
+    private DataMarshaller uasForecastFile;
     // configuration:
     private double cloneTimeShiftStDev;
     private int numHoursFromGMT;
@@ -103,12 +103,12 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
         this.mergedAirportDataFile = mergedAirportDataFile;
     }
 
-    public DataMarshaller getTafAopsFile() {
-        return this.tafAopsFile;
+    public DataMarshaller getUasForecastFile() {
+        return this.uasForecastFile;
     }
 
-    public void setTafAopsFile(DataMarshaller tafAopsFile) {
-        this.tafAopsFile = tafAopsFile;
+    public void setUasForecastFile(DataMarshaller uasForecastFile) {
+        this.uasForecastFile = uasForecastFile;
     }
 
     public double getCloneTimeShiftStDev() {
@@ -192,7 +192,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
             List<ForecastAirportCountsRecord> forecastAirportCountsRecTafList = new ArrayList<ForecastAirportCountsRecord>();
             logger.debug("loading airport forecast TAF counts...");
-            this.tafAopsFile.load(forecastAirportCountsRecTafList);
+            this.uasForecastFile.load(forecastAirportCountsRecTafList);
 
             this.scheduleGenerator.setTafAopsFile(forecastAirportCountsRecTafList);
 
@@ -239,7 +239,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
         boolean retval = false;
 
         retval = validateFiles(new DataMarshaller[]{inputScheduleFile,
-                    mergedAirportDataFile, tafAopsFile}, level);
+                    mergedAirportDataFile, uasForecastFile}, level);
         return retval;
     }
 }

@@ -11,167 +11,80 @@ package gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution;
  */
 public class ForecastTripDistAirportDataCount
 {
-	
-    private double numGA;
-    private double numMil;
-    private double numOther;
-
-    /**
-     * Use this to add a GA flight.
-     */
-    public final static char ETMS_TYPE_GA = 'G';
-
-    /**
-     * Use this to add a Military flight.
-     */
-    public final static char ETMS_TYPE_MIL = 'M';
-
-    /**
-     * Default Constructor.
-     */
-    public ForecastTripDistAirportDataCount()
-    {
-    }
-
-    /**
-     * Constructor with given starting values.
-     * @param numGA
-     * @param numMil
-     * @param numOther
-     */
-    public ForecastTripDistAirportDataCount(double numGA, double numMil, double numOther)
-    {
-        this.numGA = numGA;
-        this.numMil = numMil;
-        this.numOther = numOther;
-    }
-
-    public ForecastTripDistAirportDataCount(
-			ForecastTripDistAirportDataCount count) {
-    	this.numGA = count.numGA;
-        this.numMil = count.numMil;
-        this.numOther = count.numOther;
+	public enum MissionType {
+		BORDER_PATROL_SOUTHWEST ("U Border Patrol - Southwest Border Region"),
+		BORDER_PATROL_NORTH ("U Border Patrol - Northern Border Region"),
+		ENVIRONMNENTAL_SPILL_MONITORING ("U Environmental Spill Monitoring"),
+		TRAFFIC_REPORTING ("U Traffic Reporting & News Gathering"),
+		CARGO_DELIVERY ("U Cargo Delivery"),
+		AIR_QUALITY_MONITORING ("U Air Quality Monitoring"),
+		WILDFIRE_MONITORING ("U Wildfire Monitoring"),
+		FLOOD_MAPPING ("U Flood Mapping"),
+		LAW_ENFORCEMENT ("U Law Enforcement"),	
+		EMISSION_MONITORING ("U Point-Source Emission Monitoring"),	
+		WILDLIFE_MONITORING ("U Wildlife Monitoring"),
+		GEOPHYSICAL_MONITORING ("U Geophysical Monitoring & Exploration"),	
+		AIRBORNE_PATHOGEN_TRACKING ("U Airborne Pathogen Tracking"),
+		WEATHER_DATA_COLLECTION ("U Weather Data Collection"),
+		AIR_TAXI ("U On-Demand Air Taxi"),
+		WAYPOINT_INSPECTION ("U FAA Waypoint Inspection"),	
+		COMMUNICATION ("U Communication & Broadcast Relay"),	
+		DISASTER_RESPONSE ("U Disaster Assessment & Response"),	
+		MILITARY_TRAINING ("U Military Training"),
+		MILITARY_TRANSPORT ("U Military Transport"),	
+		PUBLIC_OTHER ("U Public Other"),
+		CIVIL_OTHER ("U Civil Other");
+		
+		private final String userClass;
+		
+		MissionType(String userClass) {
+			this.userClass = userClass;
+		}
+		
+		public String userClass() {
+			return this.userClass;
+		}
+		
+		public static MissionType fromUserClass(String userClass) {
+			for (MissionType mission : MissionType.values()) {
+				if (mission.userClass.equals(userClass)) {
+					return mission;
+				}
+			}
+			throw new IllegalArgumentException();
+		}
 	}
+	
+	private int[] counts = new int[MissionType.values().length];
 
-	/**
-     * Add a flight based on the ETMS user class.
-     * @param etmsUserClass
-     */
-    public void addFlight(char etmsUserClass)
-    {
-        switch(etmsUserClass)
-        {
-            case ETMS_TYPE_GA:
-                numGA++;
-                break;
-            case ETMS_TYPE_MIL:
-                numMil++;
-                break;
-            default:
-                numOther++;
-                break;
-        }
-    }
-
+	public void setCount(MissionType mission, int count) {
+		this.counts[mission.ordinal()] = count;
+	}
+	
+	public int getCount(MissionType mission) {
+		return this.counts[mission.ordinal()];
+	}
+	
     /**
      * Add the input data to the current data values.
      * @param addTo
      */
     public void addAllData(ForecastTripDistAirportDataCount addTo)
     {
-        numGA += addTo.getNumGA();
-        numMil += addTo.getNumMil();
-        numOther += addTo.getNumOther();
-    }
-
-    /**
-     * Add the input data to the current data values.
-     * @param numGA
-     * @param numMil
-     * @param numOther
-     */
-    public void addAllData(double numGA, double numMil, double numOther)
-    {
-        this.numGA += numGA;
-        this.numMil += numMil;
-        this.numOther += numOther;
-    }
-
-    /**
-     * Given another {@link ForecastTripDistAirportDataCount}, 
-     * remove those flight totals from this (useful when removing citypairs
-     * while closing the airport system).
-     * @param subFrom
-     */
-    public void subtractAllData(ForecastTripDistAirportDataCount subFrom)
-    {
-        numGA -= subFrom.getNumGA();
-        numMil -= subFrom.getNumMil();
-        numOther -= subFrom.getNumOther();
+        for (MissionType mission : MissionType.values()) {
+        	setCount(mission, addTo.getCount(mission));
+        }
     }
 
     /**
      * @return the total number of flights
      */
-    public double getTotal()
+    public int getTotal()
     {
-        return numGA + numMil + numOther;
+        int sum = 0;
+        for (MissionType mission : MissionType.values()) {
+        	sum += this.counts[mission.ordinal()];
+        }
+        return sum;
     }
-
-    /**
-     * Set the number of GA flights.
-     * @param numGA
-     */
-    public void setNumGA(double numGA)
-    {
-        this.numGA = numGA;
-    }
-
-    /**
-     * @return the number of GA flights
-     */
-    public double getNumGA()
-    {
-        return numGA;
-    }
-
-    /**
-     * Set the number of Military flights.
-     * @param numMil
-     */
-    public void setNumMil(double numMil)
-    {
-        this.numMil = numMil;
-    }
-
-    /**
-     * @return the number of Military flights
-     */
-    public double getNumMil()
-    {
-        return numMil;
-    }
-
-    /**
-     * Set the number of non-GA, non-Military flights.
-     * @param numOther
-     */
-    public void setNumOther(double numOther)
-    {
-        this.numOther = numOther;
-    }
-
-    /**
-     * @return the number of non-GA, non-Military flights
-     */
-    public double getNumOther()
-    {
-        return numOther;
-    }
-
-	@Override
-	public String toString() {
-		return "ForecastTripDistAirportDataCount [numGA=" + numGA + ", numMil="
-				+ numMil + ", numOther=" + numOther + "]";
-	}
 }

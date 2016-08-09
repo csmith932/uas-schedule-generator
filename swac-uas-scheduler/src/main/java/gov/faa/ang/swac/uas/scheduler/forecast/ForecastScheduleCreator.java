@@ -6,17 +6,24 @@ package gov.faa.ang.swac.uas.scheduler.forecast;
 
 import gov.faa.ang.swac.common.datatypes.Timestamp;
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
+import gov.faa.ang.swac.uas.scheduler.airport_data.AirportData;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
+import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataPair;
 import gov.faa.ang.swac.uas.scheduler.flight_data.ScheduleRecordCloner;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.*;
 import gov.faa.ang.swac.uas.scheduler.forecast.clone.ForecastCloner;
-import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistributionDataLoader;
-import gov.faa.ang.swac.uas.scheduler.forecast.vfr.ForecastVfrSchedRecCreator;
+import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportDataCount.MissionType;
 import gov.faa.ang.swac.uas.scheduler.mathematics.statistics.HQRandom;
+import gov.faa.ang.swac.uas.scheduler.utils.DateUtils;
 import gov.faa.ang.swac.uas.scheduler.vfr.VFRLocalTimeGenerator;
+import gov.faa.ang.swac.uas.scheduler.vfr.VfrSchedRecCreator;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -155,22 +162,20 @@ public class ForecastScheduleCreator
         
         // Adapt inputs to local variables & objects ----------------------------------------------
         
-        final AirportDataMap airportMap =
-            mergedAirportDataFile;
-        
-        final ForecastTafData allTafData = new ForecastTafData(
+        final Map<MissionAirportPairKey,Integer> allTafData = ForecastTafData.forecastTafData(
             this.tafAopsFile,
             forecastFiscalYear,
-            baseFiscalYear);
+            DateUtils.getQuarter(startDate),
+            this.mergedAirportDataFile);
         
         //-----------------------------------------------------------------------------------------
         // Build a list of objects which link the airports
         // to their respective arriving and departing flights
         
-        List<ForecastTripDistAirportData> airportDataList = 
+        Map<MissionAirportPairKey,List<ScheduleRecord>> scheduleMap = 
             ForecastTripDistributionDataLoader.load(
                 this.inputScheduleFile,
-                airportMap,
+                mergedAirportDataFile,
                 startTime,
                 endTime);
 
@@ -186,13 +191,12 @@ public class ForecastScheduleCreator
 
         VFRLocalTimeGenerator vfrLocalTimeGenerator = 
             new VFRLocalTimeGenerator(generator3);
-        ForecastVfrSchedRecCreator vfrLoader = 
-            new ForecastVfrSchedRecCreator(
+        VfrSchedRecCreator vfrLoader = 
+            new VfrSchedRecCreator(
                 startTime,
                 -1,
                 -1,
                 vfrLocalTimeGenerator);
-        vfrLoader.setAirportMap(airportMap);
         logger.trace("created vfr loader");  
 
         ScheduleRecordCloner schedRecCloner = 
@@ -205,15 +209,11 @@ public class ForecastScheduleCreator
         forecastCloner.setCloneTimeShiftStDev(
             cloneTimeShiftStDev);
 
-        ForecastUnitProcessor unitProcessor = 
-            new ForecastUnitProcessor();
-        
         ForecastProcessor processor = new ForecastProcessor(
-            airportDataList,
+        	scheduleMap,
             allTafData,
             forecastCloner,    
-            vfrLoader,
-            unitProcessor);
+            vfrLoader);
         this.outputScheduleFile = processor.process(
             baseFiscalYear,
             forecastFiscalYear,

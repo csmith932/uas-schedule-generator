@@ -2,36 +2,28 @@ package gov.faa.ang.swac.uas.scheduler.forecast;
 
 import gov.faa.ang.swac.common.datatypes.Timestamp;
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
-import gov.faa.ang.swac.uas.scheduler.forecast.UserClassDataSplitter.UserClass;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.*;
 import gov.faa.ang.swac.uas.scheduler.forecast.clone.ForecastCloner;
-import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
-import gov.faa.ang.swac.uas.scheduler.forecast.vfr.ForecastVfrSchedRecCreator;
-import gov.faa.ang.swac.uas.scheduler.forecast.vfr.WindowedFrcstVfrSchedRecCreator;
+import gov.faa.ang.swac.uas.scheduler.vfr.VfrSchedRecCreator;
 
 import java.util.*;
 
 public class ForecastProcessor
 {
-    private List<ForecastTripDistAirportData> airportDataList;
-
-    private ForecastTafData tafData;
-    private ForecastVfrSchedRecCreator vfrCreator;
+	private Map<MissionAirportPairKey,List<ScheduleRecord>> scheduleMap;
+    private Map<MissionAirportPairKey,Integer> tafData;
+    private VfrSchedRecCreator vfrCreator;
     private ForecastCloner cloner;
-    private ForecastUnitProcessor unitProcessor;   
 
     public ForecastProcessor(
-        List<ForecastTripDistAirportData> airportDataList,
-        ForecastTafData tafData,
+    		Map<MissionAirportPairKey,List<ScheduleRecord>> scheduleMap,
+        Map<MissionAirportPairKey,Integer> tafData,
         ForecastCloner cloner,       
-        ForecastVfrSchedRecCreator vfrCreator,
-        ForecastUnitProcessor unitProcessor)
+        VfrSchedRecCreator vfrCreator)
     {
-        this.airportDataList    = airportDataList;
+        this.scheduleMap    	= scheduleMap;
         this.tafData            = tafData;
         this.cloner             = cloner;       
         this.vfrCreator         = vfrCreator;        
-        this.unitProcessor      = unitProcessor;
     }
 
     public List<ScheduleRecord> process(
@@ -40,93 +32,72 @@ public class ForecastProcessor
         Timestamp startTime, 
         Timestamp endTime)
     {
-        // Compile the results in a list
         List<ScheduleRecord> resultList = new ArrayList<ScheduleRecord>();
         
-    	// Split airports into three sub-networks (i.e., GA, MIL, Other)
-    	// and forecast (FRATAR+Clone+VFR) each separately 
-    	UserClassDataSplitter splitter = new UserClassDataSplitter();
-    	splitter.split(airportDataList);
-        
-        // Process each user class: GA, MIL, OTHER --------------------------------------------------------------------
-        for (UserClassDataSplitter.UserClass userClass : UserClassDataSplitter.UserClass.values())
+        for (MissionAirportPairKey missionAirportPair : this.tafData.keySet())
         {
-            // Get a copy of the airport list from the splitter 
-            // corresponding to this user class
+        	int nForecastFlights = this.tafData.get(missionAirportPair);
+        	List<ScheduleRecord> baseFlights = this.scheduleMap.get(missionAirportPair);
+        	if (baseFlights == null) {
+        		baseFlights = new ArrayList<ScheduleRecord>();
+        	}
+        	
+            // Clone flights
+        	List<ScheduleRecord> forecastFlights = this.cloneFlights(
+                baseFlights, 
+                nForecastFlights); 
+        	
+            resultList.addAll(forecastFlights);
             
-            List<ForecastTripDistAirportData> airportList = 
-                splitter.getAirportList(userClass);
-            
-            // Set the baseline data in the airport data
-            setBaselineData(
-                airportList,
-                baseFiscalYear,
-                userClass);
-            
-            // Forecast this user class & append the resulting flights
-            List<ScheduleRecord> subResultList = this.unitProcessor.process(
-                airportList, 
-                this.tafData.getYearData(forecastFiscalYear),
-                this.cloner,
-                userClass);
-            resultList.addAll(subResultList); 
+            // Pad VFRs to make up the gap
+            if (forecastFlights.size() < nForecastFlights) {
+            	// Create VFR Flights 
+            	List<ScheduleRecord> vfrFlights = this.createVfrFlights(
+            			missionAirportPair,
+                        forecastFlights, 
+                        nForecastFlights); 
+            	
+                resultList.addAll(vfrFlights);
+            }
         }
 
-        // Discard the user class splitter
-        splitter.clear();
-        splitter = null;
-        
-        // Setup baseline data for VFR --------------------------------------------------------------------------------
-        
-		setBaselineData(
-            airportDataList,
-            baseFiscalYear);
-        
-        // Discard airport data 
-        for (ForecastTripDistAirportData data : airportDataList) 
-        {
-        	data.clear();
-        }
-
-        //-------------------------------------------------------------------------------------------------------------
-
-        // Create VFR Flights 
-        WindowedFrcstVfrSchedRecCreator windowedVfrCreator = 
-            new WindowedFrcstVfrSchedRecCreator(
-                vfrCreator,    
-                tafData.getYearData(forecastFiscalYear),
-                startTime,
-                endTime);     
-        windowedVfrCreator.createVfrFlights(
-            airportDataList, 
-            resultList);
-        resultList.addAll(
-            windowedVfrCreator.getFlights());
-  
         return resultList;
     }
 
-    private void setBaselineData(    
-        List<ForecastTripDistAirportData> airportList,
-        int baseFiscalYear,
-        UserClass userClass) 
-    {
-    	ForecastAirportDataMerger.setInitialEtmsCountData(airportList);
+	private List<ScheduleRecord> cloneFlights(List<ScheduleRecord> baseFlights, int nForecastFlights) {
+		if (baseFlights.size() == 0) {
+			return new ArrayList<ScheduleRecord>();
+		}
+		
+		cloner.clearFlightLists();
+        cloner.cloneFlights(baseFlights, nForecastFlights);
         
-    	ForecastAirportDataMerger.mergeCountDataIntoAirports(
-            airportList, 
-            tafData.getYearData(baseFiscalYear), 
-            ForecastAirportDataMerger.DATA_TAF_BASE, 
-            userClass);
-    }
-    
-    private void setBaselineData(
-        List<ForecastTripDistAirportData> airportList,
-        int baseFiscalYear)
+        List<ScheduleRecord> forecastFlights = new ArrayList<ScheduleRecord>();
+        forecastFlights.addAll(cloner.getClonedFlights());
+        if (cloner.getRemovedFlights().size() == 0) {
+        	forecastFlights.addAll(baseFlights);
+        } else {
+        	for (ScheduleRecord baseFlight : baseFlights) {
+        		if (!cloner.hasRemoved(baseFlight)) {
+        			forecastFlights.add(baseFlight);
+        		}
+        	}
+        }
+        return forecastFlights;
+	}
+	
+	public List<ScheduleRecord> createVfrFlights(MissionAirportPairKey missionAirportPair, List<ScheduleRecord> forecastFlights, int nForecastFlights) 
     {
-    	ForecastAirportDataMerger.mergeCountDataIntoAirports(
-            airportList, 
-            tafData.getYearData(baseFiscalYear), 
-            ForecastAirportDataMerger.DATA_TAF_BASE);
+		List<ScheduleRecord> schedRecList = new ArrayList<ScheduleRecord>();
+		
+		// Double to make sure we have a departure and arrival
+		// TODO: Triple if we add a VFR loiter as well
+        int nVfrToAdd = 2 * (nForecastFlights - forecastFlights.size());
+        if (0 < nVfrToAdd) 
+        {
+        	schedRecList.addAll(this.vfrCreator.populateMissionAirportPair(missionAirportPair,nVfrToAdd));
+        }
+        
+        return schedRecList;
     }
 }

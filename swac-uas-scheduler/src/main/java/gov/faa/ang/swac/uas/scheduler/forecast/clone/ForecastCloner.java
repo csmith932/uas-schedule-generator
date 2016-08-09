@@ -2,8 +2,6 @@ package gov.faa.ang.swac.uas.scheduler.forecast.clone;
 
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
 import gov.faa.ang.swac.uas.scheduler.flight_data.ScheduleRecordCloner;
-import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportDataPair;
-import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportData;
 import gov.faa.ang.swac.uas.scheduler.mathematics.statistics.HQRandom;
 
 import java.util.*;
@@ -57,40 +55,12 @@ public class ForecastCloner
     	this.timeShiftStdDevMins = timeMins;
     }    
       
-    public void cloneFlights(
-        List<ForecastTripDistAirportData> airportList)
-    {
-        // Clone all flights involving the airports in the given list
-        
-        for(ForecastTripDistAirportData airport : airportList)
-        {
-            // We only need to use either the "coming from" list
-            // or the "going to" list to capture all the flights.
-            // We arbitrarily choose the "coming from" list.
-            cloneFlights(airport.getComingFrom());
-        }
-    }
-
-    public void cloneFlights(
-        Collection<ForecastAirportDataPair> pairs)
-    {
-        // Clone all flights between the given O-D pairs
-        for (ForecastAirportDataPair pair : pairs)
-        {
-            cloneFlights(pair); 
-        }
-    }
-    
-    private void cloneFlights(
-        ForecastAirportDataPair pair)
+    public void cloneFlights(List<ScheduleRecord> schedRecList, Integer nForecastFlights)
     {
     	// Clone all flights between the given city pair
         
-        int nBaseFlights        = (int)pair.getInitialFlightCount();
-        int nForecastFlights    = (int)pair.getProjectedFlightCountFinal();
+        int nBaseFlights = schedRecList.size();
         
-        List<ScheduleRecord> schedRecList = pair.getFlights();
-
         if (nBaseFlights < nForecastFlights)
         {
             // need to clone some

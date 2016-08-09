@@ -4,6 +4,9 @@ import gov.faa.ang.swac.common.datatypes.Timestamp;
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportData;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
+import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataPair;
+import gov.faa.ang.swac.uas.scheduler.forecast.MissionAirportPairKey;
+import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportDataCount.MissionType;
 
 import java.io.IOException;
 import java.util.*;
@@ -13,7 +16,7 @@ import org.apache.log4j.Logger;
 
 /**
  * A Class that reads the baseline set of flights from a Forecast Demand formatted file. While
- * reading in the flights, a list of {@link ForecastTripDistAirportData} airports is created and
+ * reading in the flights, a list of airports is created and
  * those airports have the flights assigned to them. Also, while assigning flights, the airports are
  * also getting the citypairs assigned.
  * 
@@ -24,9 +27,6 @@ public class ForecastTripDistributionDataLoader
 {
     private static Logger logger = 
         LogManager.getLogger(ForecastTripDistributionDataLoader.class);
-
-    private static final int DEFAULT_ALL_AIRPORTS_SIZE = 2500;
-
     /**
      * Given an input file, read through all of the flights, create a list of airports and assign
      * the flights to them.
@@ -35,32 +35,32 @@ public class ForecastTripDistributionDataLoader
      * @return the number of flights read in and assigned to airports
      * @throws IOException
      */
-    public static List<ForecastTripDistAirportData> load(
+    public static Map<MissionAirportPairKey,List<ScheduleRecord>> load(
         List<ScheduleRecord> schedRecList,
         AirportDataMap airportDataMap,
         Timestamp startTime, 
         Timestamp endTime)
     {
-        Map<String, ForecastTripDistAirportData> tripMap =
-            new LinkedHashMap<String, ForecastTripDistAirportData>(
-                DEFAULT_ALL_AIRPORTS_SIZE);
-        
-        int nAssignedFlights = 0;
+    	Map<MissionAirportPairKey,List<ScheduleRecord>> map = new LinkedHashMap<MissionAirportPairKey,List<ScheduleRecord>>();
         
         if (startTime.before(endTime))
         {
             for (ScheduleRecord schedRec : schedRecList)
             {
-                boolean assigned = assignFlightToAirports(
+                AirportDataPair pair = assignFlightToAirports(
                     schedRec, 
                     airportDataMap,
                     startTime, 
-                    endTime,
-                    tripMap);
-
-                if (assigned)
-                {
-                    ++nAssignedFlights;
+                    endTime);
+                if (pair != null) {
+                	MissionType mission = MissionType.fromUserClass(schedRec.atoUserClass);
+        			MissionAirportPairKey key = new MissionAirportPairKey(mission, pair);
+        			List<ScheduleRecord> schedule = map.get(key);
+        			if (schedule == null) {
+        				schedule = new ArrayList<ScheduleRecord>();
+        				map.put(key, schedule);
+        			}
+        			schedule.add(schedRec);
                 }
             }
         }
@@ -69,30 +69,27 @@ public class ForecastTripDistributionDataLoader
             logger.debug("end time " + endTime + " PRECEEDS start time " + startTime);   
         }
         
-        logger.debug("loaded " + nAssignedFlights + " flights");
-
-        return new ArrayList<ForecastTripDistAirportData>(tripMap.values());
+        return map;
     }
 
-    private static boolean assignFlightToAirports(
+    private static AirportDataPair assignFlightToAirports(
         ScheduleRecord schedRec,
         AirportDataMap airportDataMap,
         Timestamp startTime,
-        Timestamp endTime,       
-        Map<String,ForecastTripDistAirportData> flightMap)
+        Timestamp endTime)
     {
         // 0. If data is null, there is no assignment
         if (schedRec == null ||
             schedRec.runwayOffTime == null ||
             schedRec.runwayOnTime == null)
         {
-            return false;
+            return null;
         }  
         
         // 1. Departure must precedpda arrival
         if (!schedRec.runwayOffTime.before(schedRec.runwayOnTime))
         {
-            return false;   
+            return null;   
         }
         
         // 2. Update flights completely outside of the window
@@ -114,7 +111,7 @@ public class ForecastTripDistributionDataLoader
         if (schedRec.runwayOffTime.before(startTime) &&    
             endTime.before(schedRec.runwayOnTime))
         {
-            return false;   
+            return null;   
         }
 
         // Get the origin airport
@@ -124,7 +121,7 @@ public class ForecastTripDistributionDataLoader
             originAirport = airportDataMap.getAirport(schedRec.depAprtIcao);
             if (originAirport == null)
             {
-                return false;
+                return null;
             }     
         }
         
@@ -144,7 +141,7 @@ public class ForecastTripDistributionDataLoader
             destinAirport = airportDataMap.getAirport(schedRec.arrAprtIcao);
             if (destinAirport == null)
             {
-                return false;
+                return null;
             }
         }
         
@@ -157,36 +154,6 @@ public class ForecastTripDistributionDataLoader
 //            return false;
 //        }
 
-        // Get the map entry for the origin airport
-        ForecastTripDistAirportData originAirportData;
-        String originAirportId = originAirport.getIcaoFaaCode();
-        if (flightMap.containsKey(originAirportId))
-        {
-            originAirportData = flightMap.get(originAirportId);
-        }
-        else
-        {
-            originAirportData = new ForecastTripDistAirportData(originAirport);
-            flightMap.put(originAirportId, originAirportData);
-        }
-
-        // Get the map entry for the destination airport
-        ForecastTripDistAirportData destinAirportData;
-        String destinAirportId = destinAirport.getIcaoFaaCode(); 
-        if (flightMap.containsKey(destinAirportId))
-        {
-            destinAirportData = flightMap.get(destinAirportId);
-        }
-        else
-        {
-            destinAirportData = new ForecastTripDistAirportData(destinAirport);
-            flightMap.put(destinAirportId,destinAirportData);
-        }
-
-        // Add the departure to the origin & the arrival to the destination
-        originAirportData.addDepartureGoingTo(destinAirportData, schedRec);
-        destinAirportData.addArrivalComingFrom(originAirportData, schedRec);
-
-        return true;
+        return new AirportDataPair(originAirport, destinAirport);
     }
 }

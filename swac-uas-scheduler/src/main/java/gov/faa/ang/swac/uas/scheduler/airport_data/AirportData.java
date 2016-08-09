@@ -336,6 +336,34 @@ public class AirportData implements TextSerializable
 	{
 		writer.println(this.toString());
 	}
-    
-    
+
+	@Override
+	public String toString() {
+		return "AirportData [faaCode=" + faaCode + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((faaCode == null) ? 0 : faaCode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AirportData other = (AirportData) obj;
+		if (faaCode == null) {
+			if (other.faaCode != null)
+				return false;
+		} else if (!faaCode.equals(other.faaCode))
+			return false;
+		return true;
+	}
 }

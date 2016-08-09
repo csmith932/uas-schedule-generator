@@ -1,12 +1,9 @@
 package gov.faa.ang.swac.uas.scheduler.vfr;
 
 import gov.faa.ang.swac.common.datatypes.Timestamp;
-import gov.faa.ang.swac.common.flightmodeling.Aircraft;
 import gov.faa.ang.swac.common.flightmodeling.ScheduleRecord;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportData;
-import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
-import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataPair;
-import gov.faa.ang.swac.uas.scheduler.flight_data.*;
+import gov.faa.ang.swac.uas.scheduler.forecast.MissionAirportPairKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,6 @@ public class VfrSchedRecCreator
     private Timestamp localDate;    
     private int nextIdNum;
     private int idNumInc; 
-    private AirportDataMap airportMap;
     
     // Output
     protected ArrayList<ScheduleRecord> schedRecList;   
@@ -41,16 +37,6 @@ public class VfrSchedRecCreator
         this.schedRecList = new ArrayList<ScheduleRecord>();
     }
     
-    public void setAirportMap(AirportDataMap airportMap)
-    {
-        this.airportMap = airportMap;
-    }
-
-    public AirportDataMap getAirportMap()
-    {
-        return airportMap;
-    }
-
     public void setLocalDate(Timestamp localDate)
     {
         this.localDate = localDate;
@@ -66,15 +52,15 @@ public class VfrSchedRecCreator
         this.schedRecList = new ArrayList<ScheduleRecord>();
     }   
     
-    public List<ScheduleRecord> populateAirport(
-        AirportData airport,
+    public List<ScheduleRecord> populateMissionAirportPair(
+        MissionAirportPairKey missionAirportPair,
         int nVfrToAdd)
     {
         List<ScheduleRecord> results = new ArrayList<ScheduleRecord>();
 
         for (int i = 0; i < nVfrToAdd; ++i)
         {
-            ScheduleRecord schedRec = createScheduleRecord(airport,i);
+            ScheduleRecord schedRec = createScheduleRecord(missionAirportPair,i);
             
             results.add(schedRec);
         }
@@ -83,11 +69,17 @@ public class VfrSchedRecCreator
     }
 
     private ScheduleRecord createScheduleRecord(
-        AirportData airport,
+    		MissionAirportPairKey missionAirportPair,
         int iVfr)
     {
         // Odd indices = arrival, Even = departures
-        final boolean departure = (iVfr%2 == 0);        
+        final boolean departure = (iVfr%2 == 0);
+        AirportData airport;
+        if (departure) {
+        	airport = missionAirportPair.airportPair.getOrigin();
+        } else {
+        	airport = missionAirportPair.airportPair.getDestination();
+        }
 
         final ScheduleRecord schedRec = new ScheduleRecord();
         
@@ -123,12 +115,13 @@ public class VfrSchedRecCreator
         }
 
         // User-class fields ----------------------------------------------------------------------
-        schedRec.userClass = "G";
-        schedRec.atoUserClass = "D VFR";
+        schedRec.userClass = "U";
+        schedRec.atoUserClass = missionAirportPair.mission.userClass();
         
         // Airspace fields ------------------------------------------------------------------------
         //schedRec.flewFlag = null; // previous code did not set it?
         schedRec.airspaceCode = "10";
+        // TODO: Center gives us the opportunity to create a VFR loiter at a random location in the center
         String center = airport.getCenter();
         if (center != null)
         {
@@ -178,6 +171,7 @@ public class VfrSchedRecCreator
 
         // I don't know what to set the remaining fields to.
         // Is null sufficient for VF?
+        // TODO: Based on our mission we can populate additional fields for loiters, esp. altitude, location, and duration
         schedRec.filedCruiseAltitude = null;
         schedRec.filedSpeed = Double.NaN;
        
