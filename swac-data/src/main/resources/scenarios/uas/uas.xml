@@ -79,7 +79,7 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
             <!--  See individual task bean definitions for details -->
             <list>
                 <!-- Scale base schedule to forecast traffic levels using cloning of existing flights and insertion of VFR placeholder flights -->
-                <ref local="scheduleGen"/>
+                <ref local="uasScheduleGen"/>
                 <ref local="dumpForecastScheduleFile"/>
             </list>
         </property>
@@ -106,7 +106,7 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
         </property>
     </bean>
     
-    <bean id="scheduleGen" class="gov.faa.ang.swac.controller.core.TaskConfiguration">    
+    <bean id="uasScheduleGen" class="gov.faa.ang.swac.controller.core.TaskConfiguration">    
         <description>
             The forecast schedule generator scales default schedule data to
             represent forecast daily traffic details. A Fratar algorithm
@@ -125,6 +125,14 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
 						<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord"/>
 						<property name="location" value="DATA"/>
 						<property name="resourceName" value="uas_forecast.csv"/>
+						<property name="readOnly" value="true"/>
+				    </bean>
+                </entry>
+                <entry key="uasVfrFile">
+	                <bean class="gov.faa.ang.swac.datalayer.identity.FileDataDescriptor">
+						<property name="dataType" value="gov.faa.ang.swac.uas.scheduler.input.UasVfrRecord"/>
+						<property name="location" value="DATA"/>
+						<property name="resourceName" value="uas_vfr.csv"/>
 						<property name="readOnly" value="true"/>
 				    </bean>
                 </entry>
@@ -163,9 +171,10 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
         </property>
         <property name="prototype">
             <bean class="gov.faa.ang.swac.uas.scheduler.forecast.RunUasScheduleGenerator">
-                <property name="cloneTimeShiftStDev" value="5.0"/>
+                <property name="cloneTimeShiftStDev" value="30.0"/>
                 <property name="numHoursFromGMT" value="9"/>
                 <property name="numDaysToForecast" value="1"/>
+                <property name="nominalTaxiTimeMinutes" value="10.0"/>
             </bean>
         </property>
         <property name="randomizedConfiguration">
@@ -198,7 +207,7 @@ under Contract No. DTFAWA-10-D-00033, which has a copyright license in accordanc
         <property name="data">
             <bean class="gov.faa.ang.swac.datalayer.identity.IntermediateDataDescriptor">
                 <property name="dataType" value="gov.faa.ang.swac.common.flightmodeling.ScheduleRecord"/>
-                <property name="dataSource" ref="scheduleGen"/>
+                <property name="dataSource" ref="uasScheduleGen"/>
             </bean>
         </property>
         <property name="file">

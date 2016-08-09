@@ -13,9 +13,10 @@ import gov.faa.ang.swac.uas.scheduler.flight_data.ScheduleRecordCloner;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.*;
 import gov.faa.ang.swac.uas.scheduler.forecast.clone.ForecastCloner;
 import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistributionDataLoader;
-import gov.faa.ang.swac.uas.scheduler.forecast.trip_distribution.ForecastTripDistAirportDataCount.MissionType;
+import gov.faa.ang.swac.uas.scheduler.input.UasVfrRecord;
 import gov.faa.ang.swac.uas.scheduler.mathematics.statistics.HQRandom;
 import gov.faa.ang.swac.uas.scheduler.utils.DateUtils;
+import gov.faa.ang.swac.uas.scheduler.vfr.EnhancedVfrSchedRecCreator;
 import gov.faa.ang.swac.uas.scheduler.vfr.VFRLocalTimeGenerator;
 import gov.faa.ang.swac.uas.scheduler.vfr.VfrSchedRecCreator;
 
@@ -70,11 +71,13 @@ public class ForecastScheduleCreator
     private List<ScheduleRecord> inputScheduleFile;
     private AirportDataMap mergedAirportDataFile;
     private List<ForecastAirportCountsRecord> tafAopsFile;
- 
+    private List<UasVfrRecord> uasVfrFile;
+    
     // configuration:
     private double  cloneTimeShiftStDev;
     private int     numHoursFromGMT;
     private int     numDaysToForecast;
+    private double	nominalTaxiTimeMinutes;
     
     // outputData:
     private List<ScheduleRecord> outputScheduleFile;
@@ -107,6 +110,16 @@ public class ForecastScheduleCreator
     public void setTafAopsFile(List<ForecastAirportCountsRecord> val)
     {
         this.tafAopsFile = val;
+    }
+
+    public List<UasVfrRecord> getUasVfrFile()
+    {
+        return this.uasVfrFile;
+    }
+
+    public void setUasVfrFile(List<UasVfrRecord> val)
+    {
+        this.uasVfrFile = val;
     }
 
     public List<ScheduleRecord> getOutputScheduleFile()
@@ -146,6 +159,16 @@ public class ForecastScheduleCreator
     {
         this.numDaysToForecast = val;
     }
+    
+    public double getNominalTaxiTimeMinutes()
+    {
+        return this.nominalTaxiTimeMinutes;
+    }
+
+    public void setNominalTaxiTimeMinutes(double nominalTaxiTimeMinutes)
+    {
+        this.nominalTaxiTimeMinutes = nominalTaxiTimeMinutes;
+    }
 
     public void run(
         final Timestamp startDate, 
@@ -178,6 +201,8 @@ public class ForecastScheduleCreator
                 mergedAirportDataFile,
                 startTime,
                 endTime);
+        
+        Map<MissionAirportPairKey,List<UasVfrRecord>> vfrMap = buildVfrMap();
 
         //-----------------------------------------------------------------------------------------
  
@@ -191,12 +216,23 @@ public class ForecastScheduleCreator
 
         VFRLocalTimeGenerator vfrLocalTimeGenerator = 
             new VFRLocalTimeGenerator(generator3);
+//        VfrSchedRecCreator vfrLoader = 
+//            new VfrSchedRecCreator(
+//                startTime,
+//                -1000000,
+//                -1,
+//                nominalTaxiTimeMinutes,
+//                vfrLocalTimeGenerator);
         VfrSchedRecCreator vfrLoader = 
-            new VfrSchedRecCreator(
-                startTime,
-                -1,
-                -1,
-                vfrLocalTimeGenerator);
+                new EnhancedVfrSchedRecCreator(
+                    startTime,
+                    -1000000,
+                    -1,
+                    nominalTaxiTimeMinutes,
+                    vfrLocalTimeGenerator,
+                    vfrMap,
+                    -10000000,
+                    7207); // TODO: Magic number for random seed. Extract to config
         logger.trace("created vfr loader");  
 
         ScheduleRecordCloner schedRecCloner = 
@@ -220,4 +256,20 @@ public class ForecastScheduleCreator
             startTime,
             endTime);
     }
+
+	private Map<MissionAirportPairKey, List<UasVfrRecord>> buildVfrMap() {
+		Map<MissionAirportPairKey, List<UasVfrRecord>> map = new LinkedHashMap<MissionAirportPairKey, List<UasVfrRecord>>();
+		for (UasVfrRecord rec : this.uasVfrFile) {
+			AirportData departure = this.mergedAirportDataFile.getAirport(rec.departure);
+			AirportData arrival = this.mergedAirportDataFile.getAirport(rec.arrival);
+			MissionAirportPairKey key = new MissionAirportPairKey(rec.missionType, new AirportDataPair(departure,arrival));
+			List<UasVfrRecord> list = map.get(key);
+			if (list == null) {
+				list = new ArrayList<UasVfrRecord>();
+				map.put(key, list);
+			}
+			list.add(rec);
+		}
+		return map;
+	}
 }

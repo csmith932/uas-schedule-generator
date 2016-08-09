@@ -11,14 +11,12 @@ import java.util.List;
 public class VfrSchedRecCreator
 {
     // Input
-    private VFRLocalTimeGenerator vfrLocalTimeGenerator;    
-    private Timestamp localDate;    
+    protected VFRLocalTimeGenerator vfrLocalTimeGenerator;    
+    protected Timestamp localDate;    
     private int nextIdNum;
-    private int idNumInc; 
+    protected int idNumInc;
+    protected double nominalTaxiTimeMinutes;
     
-    // Output
-    protected ArrayList<ScheduleRecord> schedRecList;   
-
     protected VfrSchedRecCreator()
     {
     }
@@ -27,14 +25,14 @@ public class VfrSchedRecCreator
         Timestamp localDate,
         int firstIdNum,
         int increment,
+        double nominalTaxiTimeMinutes,
         VFRLocalTimeGenerator vfrLocalTimeGenerator)
     {
         this.vfrLocalTimeGenerator = vfrLocalTimeGenerator;
         this.localDate = localDate;
         this.nextIdNum = firstIdNum;
         this.idNumInc = increment;
-
-        this.schedRecList = new ArrayList<ScheduleRecord>();
+        this.nominalTaxiTimeMinutes = nominalTaxiTimeMinutes;
     }
     
     public void setLocalDate(Timestamp localDate)
@@ -46,11 +44,6 @@ public class VfrSchedRecCreator
     {
         return localDate;
     }
-
-    protected void resetScheduleRecords()
-    {
-        this.schedRecList = new ArrayList<ScheduleRecord>();
-    }   
     
     public List<ScheduleRecord> populateMissionAirportPair(
         MissionAirportPairKey missionAirportPair,
@@ -58,22 +51,25 @@ public class VfrSchedRecCreator
     {
         List<ScheduleRecord> results = new ArrayList<ScheduleRecord>();
 
-        for (int i = 0; i < nVfrToAdd; ++i)
+        boolean dep = true;
+        for (int i = 0; i < nVfrToAdd * 2; ++i)
         {
-            ScheduleRecord schedRec = createScheduleRecord(missionAirportPair,i);
+            ScheduleRecord schedRec = createScheduleRecord(missionAirportPair,this.nextIdNum, dep);
             
             results.add(schedRec);
+            
+            this.nextIdNum += this.idNumInc;
+            dep = !dep;
         }
 
         return results;
     }
 
-    private ScheduleRecord createScheduleRecord(
+    protected ScheduleRecord createScheduleRecord(
     		MissionAirportPairKey missionAirportPair,
-        int iVfr)
+        int iVfr, boolean departure)
     {
         // Odd indices = arrival, Even = departures
-        final boolean departure = (iVfr%2 == 0);
         AirportData airport;
         if (departure) {
         	airport = missionAirportPair.airportPair.getOrigin();
@@ -84,8 +80,7 @@ public class VfrSchedRecCreator
         final ScheduleRecord schedRec = new ScheduleRecord();
         
         // Identification fields ------------------------------------------------------------------
-        schedRec.idNum = this.nextIdNum;
-        this.nextIdNum += this.idNumInc;
+        schedRec.idNum = iVfr;
         schedRec.actDate = this.localDate;
         schedRec.aircraftId = "V_" + airport.getMostLikelyCode() + "_" + (iVfr+1);
         schedRec.flightIndex = (iVfr+1);
@@ -98,7 +93,7 @@ public class VfrSchedRecCreator
             localTime.hourAdd(-airport.getUtcDifference());        
         if (departure)
         {
-            double taxiTimeSecs = 60*10; // TODO: CSS made up 10 min so I could get rid of taxi time file
+            double taxiTimeSecs = 60 * this.nominalTaxiTimeMinutes;
             
             schedRec.gateOutTime = etmsTime.secondAdd(-taxiTimeSecs);
             schedRec.gateOutTimeFlag = "CREATED";
@@ -107,7 +102,7 @@ public class VfrSchedRecCreator
         }
         else
         {
-            double taxiTimeSecs = 60*10; // TODO: CSS made up 10 min so I could get rid of taxi time file
+            double taxiTimeSecs = 60 * this.nominalTaxiTimeMinutes;
             
             schedRec.runwayOnTime = etmsTime;
             schedRec.runwayOnTimeFlag = "CREATED";
@@ -188,10 +183,5 @@ public class VfrSchedRecCreator
         schedRec.field10 = "";
         
         return schedRec;
-    }
-
-    public ArrayList<ScheduleRecord> getScheduleRecordList()
-    {
-        return schedRecList;
     }
 }

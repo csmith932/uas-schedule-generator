@@ -18,6 +18,7 @@ import gov.faa.ang.swac.datalayer.DataAccessException;
 import gov.faa.ang.swac.datalayer.storage.DataMarshaller;
 import gov.faa.ang.swac.uas.scheduler.airport_data.AirportDataMap;
 import gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord;
+import gov.faa.ang.swac.uas.scheduler.input.UasVfrRecord;
 
 public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
@@ -68,10 +69,12 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
     private DataMarshaller inputScheduleFile;
     private DataMarshaller mergedAirportDataFile;
     private DataMarshaller uasForecastFile;
+    private DataMarshaller uasVfrFile;
     // configuration:
     private double cloneTimeShiftStDev;
     private int numHoursFromGMT;
     private int numDaysToForecast;
+    private double	nominalTaxiTimeMinutes;
     // processor:
     private ForecastScheduleCreator scheduleGenerator;
     // outputData:
@@ -85,6 +88,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
         this.cloneTimeShiftStDev = b.cloneTimeShiftStDev;
         this.numHoursFromGMT = b.numHoursFromGMT;
         this.numDaysToForecast = b.numDaysToForecast;
+        this.nominalTaxiTimeMinutes = b.nominalTaxiTimeMinutes;
     }
 
     public DataMarshaller getInputScheduleFile() {
@@ -111,6 +115,14 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
         this.uasForecastFile = uasForecastFile;
     }
 
+    public DataMarshaller getUasVfrFile() {
+        return this.uasVfrFile;
+    }
+
+    public void setUasVfrFile(DataMarshaller uasVfrFile) {
+        this.uasVfrFile = uasVfrFile;
+    }
+
     public double getCloneTimeShiftStDev() {
         return this.cloneTimeShiftStDev;
     }
@@ -133,6 +145,16 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
 
     public void setNumDaysToForecast(int val) {
         this.numDaysToForecast = val;
+    }
+    
+    public double getNominalTaxiTimeMinutes()
+    {
+        return this.nominalTaxiTimeMinutes;
+    }
+
+    public void setNominalTaxiTimeMinutes(double nominalTaxiTimeMinutes)
+    {
+        this.nominalTaxiTimeMinutes = nominalTaxiTimeMinutes;
     }
 
     public ForecastScheduleCreator getScheduleGenerator() {
@@ -160,6 +182,7 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             this.scheduleGenerator.setCloneTimeShiftStDev(this.cloneTimeShiftStDev);
             this.scheduleGenerator.setNumHoursFromGMT(this.numHoursFromGMT);
             this.scheduleGenerator.setNumDaysToForecast(this.numDaysToForecast);
+            this.scheduleGenerator.setNominalTaxiTimeMinutes(this.nominalTaxiTimeMinutes);
             this.scheduleGenerator.setForecastClonerRandom((long) forecastClonerRandomSeed);
             this.scheduleGenerator.setScheduleClonerRandom((long) scheduleClonerRandomSeed);
             this.scheduleGenerator.setVfrLocalTimeRandom((long) vfrLocalTimeRandomSeed);
@@ -195,6 +218,12 @@ public final class RunUasScheduleGenerator extends CloneableAbstractTask {
             this.uasForecastFile.load(forecastAirportCountsRecTafList);
 
             this.scheduleGenerator.setTafAopsFile(forecastAirportCountsRecTafList);
+
+            List<UasVfrRecord> uasVfrRecords = new ArrayList<UasVfrRecord>();
+            logger.debug("loading UAS VFR flight specifications...");
+            this.uasVfrFile.load(uasVfrRecords);
+
+            this.scheduleGenerator.setUasVfrFile(uasVfrRecords);
 
             //---------------------------------------------------------------------------------------------------------
             // PROCESS

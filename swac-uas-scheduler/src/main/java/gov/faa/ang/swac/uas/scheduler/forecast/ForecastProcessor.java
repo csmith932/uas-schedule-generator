@@ -90,9 +90,7 @@ public class ForecastProcessor
     {
 		List<ScheduleRecord> schedRecList = new ArrayList<ScheduleRecord>();
 		
-		// Double to make sure we have a departure and arrival
-		// TODO: Triple if we add a VFR loiter as well
-        int nVfrToAdd = 2 * (nForecastFlights - forecastFlights.size());
+        int nVfrToAdd = nForecastFlights - forecastFlights.size();
         if (0 < nVfrToAdd) 
         {
         	schedRecList.addAll(this.vfrCreator.populateMissionAirportPair(missionAirportPair,nVfrToAdd));
