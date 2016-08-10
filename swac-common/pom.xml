@@ -19,10 +19,10 @@
 			<artifactId>jcip-annotations</artifactId>
 			<version>${jcip-annotations.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>jgrib</groupId>
-			<artifactId>jgrib</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>jgrib</groupId> -->
+<!-- 			<artifactId>jgrib</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>gov.faa.ang.swac</groupId>
 			<artifactId>swac-timestamp</artifactId>

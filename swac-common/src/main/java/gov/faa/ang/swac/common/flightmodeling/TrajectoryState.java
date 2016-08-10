@@ -3,7 +3,6 @@ package gov.faa.ang.swac.common.flightmodeling;
 import gov.faa.ang.swac.common.datatypes.Altitude;
 import gov.faa.ang.swac.common.datatypes.Timestamp;
 import gov.faa.ang.swac.common.flightmodeling.atmosphere.StandardAtmosphere;
-import gov.faa.ang.swac.common.flightmodeling.atmosphere.WindData;
 import gov.faa.ang.swac.common.flightmodeling.fileio.BadaRecord;
 import gov.faa.ang.swac.common.flightmodeling.fileio.BadaRecord.FlightStage;
 import gov.faa.ang.swac.common.geometry.GCPointAltTime;
@@ -48,10 +47,10 @@ public class TrajectoryState {
             Altitude perceivedAlt,
             BadaModel model,
             Altitude altitudeTransition,
-            WindData windData,
+            Object windData,
             boolean useBadaRocd) {
         if (perceivedAlt.feet() >= altitudeTransition.feet()) {
-            perceivedAlt = Altitude.valueOfFeet(Mathematics.round(StandardAtmosphere.findAltitude(windData.getPressureLevel(perceivedAlt)), 0));
+//            perceivedAlt = Altitude.valueOfFeet(Mathematics.round(StandardAtmosphere.findAltitude(windData.getPressureLevel(perceivedAlt)), 0));
         }
 
         // If aircraft mass is provided, use BadaModel figures, otherwise use BadaRecord figures
