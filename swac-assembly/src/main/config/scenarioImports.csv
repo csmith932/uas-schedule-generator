@@ -1,0 +1,16 @@
+#Base Date,Fiscal Year,Classifier,Data Type,Resource Name
+20141001,,low,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q1_low.txt
+20141001,,medium,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q1_medium.txt
+20141001,,high,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q1_high.txt
+20150101,,low,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q2_low.txt
+20150101,,medium,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q2_medium.txt
+20150101,,high,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q2_high.txt
+20150401,,low,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q3_low.txt
+20150401,,medium,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q3_medium.txt
+20150401,,high,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q3_high.txt
+20150701,,low,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q4_low.txt
+20150701,,medium,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q4_medium.txt
+20150701,,high,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q4_high.txt
+,,low,gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord,uas_forecast_low.csv
+,,medium,gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord,uas_forecast_medium.csv
+,,high,gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord,uas_forecast_high.csv
