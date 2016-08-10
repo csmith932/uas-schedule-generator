@@ -11,3 +11,6 @@
 20150701,,low,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q4_low.txt
 20150701,,medium,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q4_medium.txt
 20150701,,high,gov.faa.ang.swac.common.flightmodeling.ScheduleRecord,uas_schedule_Q4_high.txt
+,,low,gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord,uas_forecast_low.csv
+,,medium,gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord,uas_forecast_medium.csv
+,,high,gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord,uas_forecast_high.csv

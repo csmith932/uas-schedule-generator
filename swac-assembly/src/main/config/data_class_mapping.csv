@@ -37,3 +37,4 @@ sidStarDatabaseOutput_BASE_DATE.xml,gov.faa.ang.swac.tam.parser.TamXmlDbParser
 weather_data_BASE_DATE.dat,gov.faa.ang.swac.weather.GriddedWeatherDataLoader
 stepClimbRetryTimeScript_FORECAST_FISCAL_YEAR.js,gov.faa.ang.swac.simengine.data.jni.StepClimbRetryTimeScript
 oceanicSeparationScript_FORECAST_FISCAL_YEAR.js,gov.faa.ang.swac.simengine.data.jni.OceanicSeparationScript
+uas_forecast_CLASSIFIER.csv,gov.faa.ang.swac.uas.scheduler.forecast.airport_data.ForecastAirportCountsRecord
